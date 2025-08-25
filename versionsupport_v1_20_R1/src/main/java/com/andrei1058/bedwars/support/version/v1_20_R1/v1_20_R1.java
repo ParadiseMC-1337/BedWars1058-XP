@@ -125,6 +125,7 @@ public class v1_20_R1 extends VersionSupport {
                 ChatMessageType.ACTION_BAR,
                 new TextComponent(ChatColor.translateAlternateColorCodes('&', text)
                 )
+
         );
     }
 
@@ -825,6 +826,55 @@ public class v1_20_R1 extends VersionSupport {
         player.spawnParticle(Particle.VILLAGER_HAPPY, location, 1);
     }
 
+    @Override
+    public void displayParticle(Player player, String particle, Location location, int amount) {
+        try {
+            org.bukkit.Particle bukkitParticle;
+            // Map common particle names to 1.16 Bukkit Particle enum
+            switch (particle.toUpperCase()) {
+                case "FIREWORKS_SPARK":
+                case "FIREWORK_SHOOT":
+                    bukkitParticle = org.bukkit.Particle.FIREWORKS_SPARK;
+                    break;
+                case "VILLAGER_HAPPY":
+                    bukkitParticle = org.bukkit.Particle.VILLAGER_HAPPY;
+                    break;
+                case "REDSTONE":
+                    bukkitParticle = org.bukkit.Particle.REDSTONE;
+                    break;
+                case "FLAME":
+                    bukkitParticle = org.bukkit.Particle.FLAME;
+                    break;
+                case "SMOKE_NORMAL":
+                    bukkitParticle = org.bukkit.Particle.SMOKE_NORMAL;
+                    break;
+                case "EXPLOSION_NORMAL":
+                    bukkitParticle = org.bukkit.Particle.EXPLOSION_NORMAL;
+                    break;
+                case "SPELL":
+                    bukkitParticle = org.bukkit.Particle.SPELL;
+                    break;
+                case "HEART":
+                    bukkitParticle = org.bukkit.Particle.HEART;
+                    break;
+                default:
+                    // Try to parse as enum directly
+                    bukkitParticle = org.bukkit.Particle.valueOf(particle.toUpperCase());
+                    break;
+            }
+
+            // Send to all players in the world
+            for (Player worldPlayer : location.getWorld().getPlayers()) {
+                worldPlayer.spawnParticle(bukkitParticle, location, amount);
+            }
+        } catch (Exception e) {
+            // Fallback to VILLAGER_HAPPY if particle not found
+            for (Player worldPlayer : location.getWorld().getPlayers()) {
+                worldPlayer.spawnParticle(org.bukkit.Particle.VILLAGER_HAPPY, location, amount);
+            }
+        }
+    }
+
     private void sendPacket(Player player, Packet<?> packet) {
         ((CraftPlayer) player).getHandle().c.a(packet);
     }
@@ -834,5 +884,70 @@ public class v1_20_R1 extends VersionSupport {
         for (Packet<?> p : packets) {
             connection.a(p);
         }
+    }
+
+    @Override
+    public String getRawNBT(org.bukkit.inventory.ItemStack itemStack) {
+        var tag = getTag(itemStack);
+        return tag == null ? "{}" : tag.toString();
+    }
+
+    @Override
+    public org.bukkit.inventory.ItemStack createItemStackWithNBT(String material, int amount, short data, String rawNBT) {
+        org.bukkit.inventory.ItemStack itemStack = createItemStack(material, amount, data);
+        if (rawNBT != null && !rawNBT.isEmpty() && !rawNBT.equals("{}")) {
+            return applyRawNBT(itemStack, rawNBT);
+        }
+        return itemStack;
+    }
+
+    @Override
+    public org.bukkit.inventory.ItemStack applyRawNBT(org.bukkit.inventory.ItemStack itemStack, String rawNBT) {
+        if (rawNBT == null || rawNBT.isEmpty() || rawNBT.equals("{}")) {
+            return itemStack;
+        }
+        
+        try {
+            // Create or get existing tag
+            var tag = getCreateTag(itemStack);
+            
+            // Simple parsing for basic NBT format like {CustomModelData:123456}
+            if (rawNBT.startsWith("{") && rawNBT.endsWith("}")) {
+                String content = rawNBT.substring(1, rawNBT.length() - 1);
+                String[] pairs = content.split(",");
+                
+                for (String pair : pairs) {
+                    String[] keyValue = pair.split(":");
+                    if (keyValue.length == 2) {
+                        String key = keyValue[0].trim();
+                        String value = keyValue[1].trim();
+                        
+                        // Try to parse as different types
+                        if (value.matches("-?\\d+")) {
+                            // Integer
+                            tag.a(key, Integer.parseInt(value));
+                        } else if (value.matches("-?\\d+\\.\\d+")) {
+                            // Double
+                            tag.a(key, Double.parseDouble(value));
+                        } else if (value.equals("true") || value.equals("false")) {
+                            // Boolean (represented as byte in NBT)
+                            tag.a(key, (byte) (Boolean.parseBoolean(value) ? 1 : 0));
+                        } else {
+                            // String (remove quotes if present)
+                            if (value.startsWith("\"") && value.endsWith("\"")) {
+                                value = value.substring(1, value.length() - 1);
+                            }
+                            tag.a(key, value);
+                        }
+                    }
+                }
+                
+                return applyTag(itemStack, tag);
+            }
+        } catch (Exception e) {
+            getPlugin().getLogger().warning("Failed to parse NBT string: " + rawNBT + " - " + e.getMessage());
+        }
+        
+        return itemStack;
     }
 }

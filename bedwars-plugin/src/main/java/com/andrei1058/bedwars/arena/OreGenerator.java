@@ -32,10 +32,13 @@ import com.andrei1058.bedwars.api.events.gameplay.GeneratorUpgradeEvent;
 import com.andrei1058.bedwars.api.language.Language;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.region.Cuboid;
+import com.andrei1058.bedwars.configuration.ArenaConfig;
+import com.andrei1058.bedwars.xp.ExperienceManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -143,59 +146,90 @@ public class OreGenerator implements IGenerator {
 
     @Override
     public void spawn() {
+
+        // 检查竞技场是否正在进行中，如果不是则直接返回
         if (arena.getStatus() != GameState.playing){
             return;
         }
 
+        // 当 lastSpawn (上次生成倒计时) 为0时，触发生成逻辑
         if (lastSpawn == 0) {
+            // 重置生成倒计时
             lastSpawn = delay;
 
+            // 如果设置了生成物品的数量上限
             if (spawnLimit != 0) {
                 int oreCount = 0;
 
+                // 遍历生成点附近的实体，检查掉落物数量
                 for (Entity e : location.getWorld().getNearbyEntities(location, 3, 3, 3)) {
                     if (e.getType() == EntityType.DROPPED_ITEM) {
                         Item i = (Item) e;
+                        // 如果掉落物与当前生成器矿物类型相同
                         if (i.getItemStack().getType() == ore.getType()) {
                             oreCount++;
                         }
+                        // 如果掉落物数量达到或超过上限，则本次不生成
                         if (oreCount >= spawnLimit) return;
                     }
                 }
                 lastSpawn = delay;
             }
+            // bwt 是 BedWarsTeam 的缩写。如果为null，代表这是公共生成点 (如钻石/绿宝石)
             if (bwt == null) {
                 dropItem(location);
                 return;
             }
+            // 如果队伍只有一名玩家，直接掉落物品
             if (bwt.getMembers().size() == 1) {
                 dropItem(location);
                 return;
             }
+
+            YamlConfiguration yml = new ArenaConfig(BedWars.plugin, arena.getArenaName(), plugin.getDataFolder().getPath() + "/Arenas").getYml();
+
+            // 检查是否在配置文件中启用了"生成器资源平均分配"功能
             if (plugin.getConfig().getBoolean(ConfigPath.GENERAL_CONFIGURATION_ENABLE_GEN_SPLIT)) {
+                // 获取生成器附近的玩家
                 Object[] players = location.getWorld().getNearbyEntities(location, 1, 1, 1).stream().filter(entity -> entity.getType() == EntityType.PLAYER)
                         .filter(entity -> arena.isPlayer((Player) entity)).toArray();
+                // 如果只有一个或没有玩家在附近，则直接掉落物品
                 if (players.length <= 1) {
                     dropItem(location);
                     return;
                 }
+                // 遍历附近的玩家，为他们直接添加物品
                 for (Object o : players) {
                     Player player = (Player) o;
                     ItemStack item = ore.clone();
                     item.setAmount(amount);
-                    player.playSound(player.getLocation(), Sound.valueOf(BedWars.getForCurrentVersion("ITEM_PICKUP", "ENTITY_ITEM_PICKUP", "ENTITY_ITEM_PICKUP")), 0.6f, 1.3f);
-                    Collection<ItemStack> excess = player.getInventory().addItem(item).values();
-                    for (ItemStack value : excess) {
-                        dropItem(player.getLocation(), value.getAmount());
+
+                    int xp = ExperienceManager.getExperienceFromMaterial(item.getType()) * item.getAmount();
+
+                    if (!yml.getBoolean(ConfigPath.ARENA_ENABLE_XP) || xp == 0) {
+                        // 播放物品拾取音效
+                        player.playSound(player.getLocation(), Sound.valueOf(BedWars.getForCurrentVersion("ITEM_PICKUP", "ENTITY_ITEM_PICKUP", "ENTITY_ITEM_PICKUP")), 0.6f, 1.3f);
+                        // 将物品添加到玩家背包，如果背包满了，则获取多余的物品
+                        Collection<ItemStack> excess = player.getInventory().addItem(item).values();
+                        // 将多余的物品在玩家位置掉落
+                        for (ItemStack value : excess) {
+                            dropItem(player.getLocation(), value.getAmount());
+                        }
+                    } else {
+                        player.playSound(player.getLocation(), Sound.valueOf(BedWars.getForCurrentVersion("ORB_PICKUP", "ENTITY_EXPERIENCE_ORB_PICKUP", "ENTITY_EXPERIENCE_ORB_PICKUP")), 0.6f, 1.3f);
+                        player.setLevel(player.getLevel() + xp);
                     }
                 }
                 return;
             } else {
+                // 如果没有启用资源平均分配，则直接在生成点掉落物品
                 dropItem(location);
                 return;
             }
         }
+        // 倒计时减一
         lastSpawn--;
+        // 更新全息显示上的倒计时
         for (IGenHolo e : armorStands.values()) {
             e.setTimerName(Language.getLang(e.getIso()).m(Messages.GENERATOR_HOLOGRAM_TIMER).replace("{seconds}", String.valueOf(lastSpawn)));
         }

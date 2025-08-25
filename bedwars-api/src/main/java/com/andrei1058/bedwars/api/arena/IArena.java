@@ -250,6 +250,13 @@ public interface IArena {
      */
     Map<UUID, Long> getFireballCooldowns();
 
+    Map<UUID, Long> getWarpPowderCooldowns();
+
+    Map<UUID, Long> getProtectionWallCooldowns();
+
+    Map<UUID, Long> getRescuePlatformCooldowns();
+
+
     /**
      * Remove placed block.
      */

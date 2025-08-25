@@ -199,6 +199,7 @@ public class ConfigPath {
     public static final String ARENA_SPEC_LOC = "spectator-loc";
     public static final String ARENA_TEAM_KILL_DROPS_LOC = "kill-drops-loc";
     public static final String ARENA_Y_LEVEL_KILL = "y-kill-height";
+    public static final String ARENA_ENABLE_XP = "enable-XP-mode";
 
     public static final String SOUNDS_COUNTDOWN_TICK = "game-countdown-others";
     public static final String SOUNDS_COUNTDOWN_TICK_X = "game-countdown-s";
@@ -269,6 +270,15 @@ public class ConfigPath {
 
     public static final String SHOP_SPECIAL_TOWER_ENABLE = SHOP_SPECIALS_PATH + ".tower.enable";
     public static final String SHOP_SPECIAL_TOWER_MATERIAL = SHOP_SPECIALS_PATH + ".tower.material";
+
+    public static final String SHOP_SPECIAL_RESCUE_PLATFORM_ENABLE = SHOP_SPECIALS_PATH + ".rescue-platform.enable";
+    public static final String SHOP_SPECIAL_RESCUE_PLATFORM_MATERIAL = SHOP_SPECIALS_PATH + ".rescue-platform.material";
+    public static final String SHOP_SPECIAL_WARP_POWDER_ENABLE = SHOP_SPECIALS_PATH + ".warp-powder.enable";
+    public static final String SHOP_SPECIAL_WARP_POWDER_MATERIAL = SHOP_SPECIALS_PATH + ".warp-powder.material";
+
+    public static final String SHOP_SPECIAL_PROTECTION_WALL_ENABLE = SHOP_SPECIALS_PATH + ".protection-wall.enable";
+    public static final String SHOP_SPECIAL_PROTECTION_WALL_MATERIAL = SHOP_SPECIALS_PATH + ".protection-wall.material";
+
     public static final String SHOP_SPECIAL_SILVERFISH_ENABLE = SHOP_SPECIALS_PATH + ".silverfish.enable";
     public static final String SHOP_SPECIAL_SILVERFISH_MATERIAL = SHOP_SPECIALS_PATH + ".silverfish.material";
     public static final String SHOP_SPECIAL_SILVERFISH_DATA = SHOP_SPECIALS_PATH + ".silverfish.data";
@@ -344,4 +354,33 @@ public class ConfigPath {
 
     public static final String LOBBY_VOID_TELEPORT_ENABLED = "lobby-settings.void-tp";
     public static final String LOBBY_VOID_TELEPORT_HEIGHT = "lobby-settings.void-height";
+
+    public static final String XP_CONFIG_PATH_IRON = "xp-per-material.iron";
+    public static final String XP_CONFIG_PATH_GOLD = "xp-per-material.gold";
+    public static final String XP_CONFIG_PATH_DIAMOND = "xp-per-material.diamond";
+    public static final String XP_CONFIG_PATH_EMERALD = "xp-per-material.emerald";
+    public static final String XP_CONFIG_PATH_XP_BOTTLE = "xp-per-material.xp-bottle";
+
+    // Levels Formatting
+    public static final String LEVEL_FORMAT_PATH = "level-formatting";
+
+    /**
+     * Special items settings
+     */
+    public static final String SPECIAL_ITEMS_WARP_POWDER_TELEPORT_TIME = "special-items.warp-powder.teleport-time";
+    public static final String SPECIAL_ITEMS_WARP_POWDER_DELAY = "special-items.warp-powder.delay";
+
+    public static final String SPECIAL_ITEMS_PROTECTION_WALL_DELAY = "special-items.protection-wall.delay";
+    public static final String SPECIAL_ITEMS_PROTECTION_WALL_WIDTH = "special-items.protection-wall.width";
+    public static final String SPECIAL_ITEMS_PROTECTION_WALL_HEIGHT = "special-items.protection-wall.height";
+    public static final String SPECIAL_ITEMS_PROTECTION_WALL_DISTANCE = "special-items.protection-wall.distance";
+    public static final String SPECIAL_ITEMS_PROTECTION_WALL_MATERIAL = "special-items.protection-wall.material";
+
+    public static final String SPECIAL_ITEMS_RESCUE_PLATFORM_DELAY = "special-items.rescue-platform.delay";
+    public static final String SPECIAL_ITEMS_RESCUE_PLATFORM_BREAK_TIME = "special-items.rescue-platform.break-time";
+    public static final String SPECIAL_ITEMS_RESCUE_PLATFORM_MATERIAL = "special-items.rescue-platform.material";
+
+
+    private ConfigPath() {
+    }
 }

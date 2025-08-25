@@ -205,6 +205,7 @@ public class Romanian extends Language {
         yml.addDefault(Messages.MEANING_DIAMOND_PLURAL, "Diamante");
         yml.addDefault(Messages.MEANING_VAULT_SINGULAR, "$");
         yml.addDefault(Messages.MEANING_VAULT_PLURAL, "$");
+        yml.addDefault(Messages.MEANING_EXP, "经验");
         yml.addDefault(Messages.MEANING_NEVER, "Niciodata");
         yml.addDefault(Messages.INTERACT_CHEST_CANT_OPEN_TEAM_ELIMINATED, "&cNu poti deschide acest cufar pentru ca echipa nu a fost eliminata!");
         yml.addDefault(Messages.INTERACT_CANNOT_PLACE_BLOCK, "{prefix}&cNu poti pune blocuri aici!");
@@ -1132,6 +1133,8 @@ public class Romanian extends Language {
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_MSG + "3", "&c&lAlarm trap set off by &7&l{player} &c&lfrom {color}&l{team} &c&lteam!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_TITLE + "3", "&c&lALARM!!!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_SUBTITLE + "3", "&fAlarm trap set off by {color}{team} &fteam!");
+        yml.addDefault(Messages.SPECIAL_ITEMS_RESCUE_PLATFORM_CREATE_FAILED, "&c你不能在这使用自救平台");
+        yml.addDefault(Messages.SPECIAL_ITEMS_PROTECTION_WALL_CREATE_FAILED, "&c你不能在这使用防守墙");
         save();
         setPrefix(m(Messages.PREFIX));
         setPrefixStatic(m(Messages.PREFIX));

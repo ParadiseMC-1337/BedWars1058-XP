@@ -92,6 +92,13 @@ public class ShopManager extends ConfigManager {
         getYml().addDefault(ConfigPath.SHOP_SPECIAL_TOWER_ENABLE, true);
         getYml().addDefault(ConfigPath.SHOP_SPECIAL_TOWER_MATERIAL, BedWars.getForCurrentVersion("CHEST", "CHEST", "CHEST"));
 
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_RESCUE_PLATFORM_ENABLE, true);
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_RESCUE_PLATFORM_MATERIAL, "BLAZE_ROD");
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_WARP_POWDER_ENABLE, true);
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_WARP_POWDER_MATERIAL, "GUNPOWDER");
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_PROTECTION_WALL_ENABLE, true);
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_PROTECTION_WALL_MATERIAL, "CUT_SANDSTONE");
+
         if (isFirstTime()) {
             //quick buy defaults
             getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element1.path", "blocks-category.category-content.wool");
@@ -121,11 +128,7 @@ public class ShopManager extends ConfigManager {
             getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element12.slot", 33);
             getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element13.path", "utility-category.category-content.water-bucket");
             getYml().addDefault(ConfigPath.SHOP_QUICK_DEFAULTS_PATH + ".element13.slot", 34);
-        }
 
-        //save default shop categories if the file was just generated
-        //so the user can remove categories or add new ones
-        if (isFirstTime()) {
             //BLOCKS CATEGORY
             addDefaultShopCategory(ConfigPath.SHOP_PATH_CATEGORY_BLOCKS, 1, BedWars.getForCurrentVersion("STAINED_CLAY", "STAINED_CLAY", "ORANGE_TERRACOTTA"), 1, 1, false);
 
@@ -355,6 +358,20 @@ public class ShopManager extends ConfigManager {
             addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "tower", "tier1", "tower", BedWars.getForCurrentVersion("CHEST", "CHEST", "CHEST"),
                     0, 1, "", "", "", false);
 
+            adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "rescue-platform", 32, "tier1",
+                    "BLAZE_ROD", 0, 1, false, 1, "emerald", false, false);
+            addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "rescue-platform", "tier1", "rescue-platform", "BLAZE_ROD",
+                    0, 1, "", "", "", false);
+
+            adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "warp-powder", 33, "tier1",
+                    "GUNPOWDER", 0, 1, false, 5, "emerald", false, false);
+            addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "warp-powder", "tier1", "warp-powder", "GUNPOWDER",
+                    0, 1, "", "", "", false);
+
+            adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "protection-wall", 34, "tier1",
+                    "CUT_SANDSTONE", 0, 1, false, 12, "gold", false, false);
+            addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "protection-wall", "tier1", "protection-wall", "CUT_SANDSTONE",
+                    0, 1, "", "", "", false);
         }
 
         if (getYml().get(ConfigPath.SHOP_PATH_CATEGORY_ARMOR + ConfigPath.SHOP_CATEGORY_CONTENT_PATH + ".diamond-armor") != null) {

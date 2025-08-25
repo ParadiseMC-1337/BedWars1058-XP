@@ -36,6 +36,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * 代表商店的主界面 (GUI)。
+ * 这个类负责组合所有的商品类别 ({@link ShopCategory})、快速购买按钮和分隔符，
+ * 并为玩家构建和显示完整的商店窗口。
+ */
 @SuppressWarnings("WeakerAccess")
 public class ShopIndex {
 
@@ -49,14 +54,14 @@ public class ShopIndex {
 
 
     /**
-     * Create a shop index
+     * 创建一个商店主界面实例。
      *
-     * @param namePath          Message path for the shop inventory name
-     * @param quickBuyButton    Player quick buy preferences cache
-     * @param separatorNamePath Message path for the shop separator item name
-     * @param separatorLorePath Message path for the shop separator lore name
-     * @param separatorSelected ItemStack for selected category indicator
-     * @param separatorStandard ItemStack for standard separator
+     * @param namePath          商店GUI标题的语言路径。
+     * @param quickBuyButton    快速购买按钮 ({@link QuickBuyButton})。
+     * @param separatorNamePath 分隔符物品名称的语言路径。
+     * @param separatorLorePath 分隔符物品Lore的语言路径。
+     * @param separatorSelected 用于标记当前选中类别的分隔符物品。
+     * @param separatorStandard 标准的分隔符物品。
      */
     public ShopIndex(String namePath, QuickBuyButton quickBuyButton, String separatorNamePath, String separatorLorePath, ItemStack separatorSelected, ItemStack separatorStandard) {
         this.namePath = namePath;
@@ -68,11 +73,11 @@ public class ShopIndex {
     }
 
     /**
-     * Open this shop to a player
+     * 为玩家打开商店主界面。
      *
-     * @param callEvent     true if you want to call the shop open event
-     * @param quickBuyCache the player cache regarding his preferences
-     * @param player        target player
+     * @param player        目标玩家。
+     * @param quickBuyCache 玩家的快速购买缓存。
+     * @param callEvent     是否触发 {@link ShopOpenEvent} 事件。
      */
     public void open(Player player, PlayerQuickBuyCache quickBuyCache, boolean callEvent) {
 
@@ -86,18 +91,23 @@ public class ShopIndex {
 
         Inventory inv = Bukkit.createInventory(null, invSize, Language.getMsg(player, getNamePath()));
 
+        // 添加快速购买按钮
         inv.setItem(getQuickBuyButton().getSlot(), getQuickBuyButton().getItemStack(player));
 
+        // 添加所有商品类别
         for (ShopCategory sc : getCategoryList()) {
             inv.setItem(sc.getSlot(), sc.getItemStack(player));
         }
 
+        // 添加分隔符
         addSeparator(player, inv);
 
+        // 默认选中快速购买类别，并添加选中标记
         inv.setItem(getQuickBuyButton().getSlot() + 9, getSelectedItem(player));
         //noinspection ConstantConditions
         ShopCache.getShopCache(player.getUniqueId()).setSelectedCategory(getQuickBuyButton().getSlot());
 
+        // 将玩家的快速购买项添加到GUI中
         quickBuyCache.addInInventory(inv, ShopCache.getShopCache(player.getUniqueId()));
 
         player.openInventory(inv);
@@ -108,7 +118,9 @@ public class ShopIndex {
 
 
     /**
-     * Add shop separator between categories and items
+     * 在GUI中添加分隔符行。
+     * @param player 目标玩家，用于获取本地化文本。
+     * @param inv    要添加分隔符的库存。
      */
     public void addSeparator(Player player, Inventory inv) {
         ItemStack i = separatorStandard.clone();
@@ -125,7 +137,8 @@ public class ShopIndex {
     }
 
     /**
-     * This is the item that indicates the selected category
+     * 获取用于指示当前所选类别的物品。
+     * @param player 目标玩家，用于获取本地化文本。
      */
     public ItemStack getSelectedItem(Player player) {
         ItemStack i = separatorSelected.clone();
@@ -139,7 +152,7 @@ public class ShopIndex {
     }
 
     /**
-     * Add a shop category
+     * 添加一个商店类别到主界面。
      */
     public void addShopCategory(ShopCategory sc) {
         categoryList.add(sc);
@@ -147,33 +160,36 @@ public class ShopIndex {
     }
 
     /**
-     * Get the inventory name path
+     * 获取商店界面的标题语言路径。
      */
     public String getNamePath() {
         return namePath;
     }
 
     /**
-     * Get the inventory size
+     * 获取商店界面的大小。
      */
     public int getInvSize() {
         return invSize;
     }
 
     /**
-     * Get the shop's categories
+     * 获取所有商店类别的列表。
      */
     public List<ShopCategory> getCategoryList() {
         return categoryList;
     }
 
     /**
-     * Get the quick buy button
+     * 获取快速购买按钮。
      */
     public QuickBuyButton getQuickBuyButton() {
         return quickBuyButton;
     }
 
+    /**
+     * 获取当前正在查看商店主界面的玩家列表。
+     */
     public static List<UUID> getIndexViewers() {
         return new ArrayList<>(indexViewers);
     }

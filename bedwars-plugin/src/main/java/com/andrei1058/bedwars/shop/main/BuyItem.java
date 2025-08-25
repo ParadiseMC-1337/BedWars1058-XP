@@ -41,6 +41,11 @@ import org.bukkit.potion.PotionEffectType;
 import static com.andrei1058.bedwars.BedWars.nms;
 import static com.andrei1058.bedwars.BedWars.plugin;
 
+/**
+ * 代表一个可购买的实际物品。
+ * 负责从配置中加载物品的属性，如材质、数量、附魔和药水效果，
+ * 并处理将物品给予玩家的逻辑，包括自动装备和应用团队升级。
+ */
 @SuppressWarnings("WeakerAccess")
 public class BuyItem implements IBuyItem {
 
@@ -52,7 +57,11 @@ public class BuyItem implements IBuyItem {
     private final String upgradeIdentifier;
 
     /**
-     * Create a shop item
+     * 创建一个商店物品。
+     * @param path              在配置文件中的路径。
+     * @param yml               配置文件实例。
+     * @param upgradeIdentifier 用于识别和升级物品的唯一标识符。
+     * @param parent            该物品所属的 {@link ContentTier}。
      */
     public BuyItem(String path, YamlConfiguration yml, String upgradeIdentifier, ContentTier parent) {
         BedWars.debug("Loading BuyItems: " + path);
@@ -63,10 +72,12 @@ public class BuyItem implements IBuyItem {
             return;
         }
 
+        // 创建基础 ItemStack
         itemStack = nms.createItemStack(yml.getString(path + ".material"),
                 yml.get(path + ".amount") == null ? 1 : yml.getInt(path + ".amount"),
                 (short) (yml.get(path + ".data") == null ? 1 : yml.getInt(path + ".data")));
 
+        // 设置自定义名称
         if (yml.get(path + ".name") != null) {
             ItemMeta im = itemStack.getItemMeta();
             if (im != null) {
@@ -75,6 +86,7 @@ public class BuyItem implements IBuyItem {
             }
         }
 
+        // 添加附魔
         if (yml.get(path + ".enchants") != null && itemStack.getItemMeta() != null) {
             ItemMeta imm = itemStack.getItemMeta();
             String[] enchant = yml.getString(path + ".enchants").split(",");
@@ -100,8 +112,9 @@ public class BuyItem implements IBuyItem {
             itemStack.setItemMeta(imm);
         }
 
+        // 为药水添加效果
         if (yml.get(path + ".potion") != null && (itemStack.getType() == Material.POTION)) {
-            // 1.16+ custom color
+            // 1.16+ 自定义药水颜色
             if (yml.getString(path + ".potion-color") != null && !yml.getString(path + ".potion-color").isEmpty()) {
                 itemStack = nms.setTag(itemStack, "CustomPotionColor", yml.getString(path + ".potion-color"));
             }
@@ -137,6 +150,7 @@ public class BuyItem implements IBuyItem {
             }
 
             itemStack = nms.setTag(itemStack, "Potion", "minecraft:water");
+            // 将药水效果也应用到父级（ContentTier）的预览物品上
             if (parent.getItemStack().getType() == Material.POTION && imm != null && !imm.getCustomEffects().isEmpty()) {
                 ItemStack parentItemStack = parent.getItemStack();
                 if (parentItemStack.getItemMeta() != null) {
@@ -151,6 +165,7 @@ public class BuyItem implements IBuyItem {
             }
         }
 
+        // 加载其他属性
         if (yml.get(path + ".auto-equip") != null) {
             autoEquip = yml.getBoolean(path + ".auto-equip");
         }
@@ -165,29 +180,32 @@ public class BuyItem implements IBuyItem {
     }
 
     /**
-     * Check if object created properly
+     * 检查物品是否已成功加载。
      */
     public boolean isLoaded() {
         return loaded;
     }
 
     /**
-     * Give to a player
+     * 将物品给予玩家。
+     * @param player 接收物品的玩家。
+     * @param arena  玩家所在的竞技场。
      */
     public void give(Player player, IArena arena) {
 
         ItemStack i = itemStack.clone();
         BedWars.debug("Giving BuyItem: " + getUpgradeIdentifier() + " to: " + player.getName());
 
+        // 处理自动装备逻辑
         if (autoEquip && nms.isArmor(itemStack)) {
             Material m = i.getType();
 
             ItemMeta im = i.getItemMeta();
-            // idk dadea erori
             if (arena.getTeam(player) == null) {
                 BedWars.debug("Could not give BuyItem to " + player.getName() + " - TEAM IS NULL");
                 return;
             }
+            // 应用团队护甲附魔
             if (im != null) {
                 for (TeamEnchant e : arena.getTeam(player).getArmorsEnchantments()) {
                     im.addEnchant(e.getEnchantment(), e.getAmplifier(), true);
@@ -196,6 +214,7 @@ public class BuyItem implements IBuyItem {
                 i.setItemMeta(im);
             }
 
+            // 根据护甲类型装备到对应槽位
             if (m == Material.LEATHER_HELMET || m == Material.CHAINMAIL_HELMET || m == Material.IRON_HELMET || m == Material.DIAMOND_HELMET || m == nms.materialGoldenHelmet() || m == nms.materialNetheriteHelmet()) {
                 if (permanent) i = nms.setShopUpgradeIdentifier(i, upgradeIdentifier);
                 player.getInventory().setHelmet(i);
@@ -212,6 +231,7 @@ public class BuyItem implements IBuyItem {
             player.updateInventory();
             Sounds.playSound("shop-auto-equip", player);
 
+            // 延迟任务，处理隐身状态下护甲的显示问题
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 // #274
                 if (player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
@@ -223,12 +243,13 @@ public class BuyItem implements IBuyItem {
             }, 20L);
             return;
         } else {
-
+            // 非自动装备的物品处理
             ItemMeta im = i.getItemMeta();
-            i = nms.colourItem(i, arena.getTeam(player));
+            i = nms.colourItem(i, arena.getTeam(player)); // 为羊毛等物品上色
             if (im != null) {
                 if (permanent) nms.setUnbreakable(im);
                 if (unbreakable) nms.setUnbreakable(im);
+                // 应用团队武器附魔
                 if (i.getType() == Material.BOW) {
                     if (permanent) nms.setUnbreakable(im);
                     for (TeamEnchant e : arena.getTeam(player).getBowsEnchantments()) {
@@ -247,7 +268,7 @@ public class BuyItem implements IBuyItem {
             }
         }
 
-        //Remove swords with lower damage
+        // 移除伤害更低的剑
         if (BedWars.nms.isSword(i)) {
             for (ItemStack itm : player.getInventory().getContents()) {
                 if (itm == null) continue;
@@ -268,8 +289,8 @@ public class BuyItem implements IBuyItem {
 
 
     /**
-     * Get upgrade identifier.
-     * Used to remove old tier items.
+     * 获取升级标识符。
+     * 用于移除旧层级的物品。
      */
     public String getUpgradeIdentifier() {
         return upgradeIdentifier;

@@ -115,6 +115,8 @@ public class BedWars extends JavaPlugin {
     public static StatsManager statsManager;
     public static BedWars plugin;
     public static VersionSupport nms;
+    public static XpConfig xpConfig;
+    public static SpecialItemsConfig specialItemsConfig;
 
     public static boolean isPaper = false;
 
@@ -201,6 +203,8 @@ public class BedWars extends JavaPlugin {
         new Turkish();
 
         config = new MainConfig(this, "config");
+        xpConfig = new XpConfig(this, "xp", this.getDataFolder().getPath());
+        specialItemsConfig = new SpecialItemsConfig(this, "special-items", this.getDataFolder().getPath());
 
         generators = new GeneratorsConfig(this, "generators", this.getDataFolder().getPath());
         // Initialize signs config after the main config
@@ -277,7 +281,7 @@ public class BedWars extends JavaPlugin {
                 new Inventory(), new Interact(), new RefreshGUI(), new HungerWeatherSpawn(), new CmdProcess(),
                 new FireballListener(), new EggBridge(), new SpectatorListeners(), new BaseListener(),
                 new TargetListener(), new LangListener(), new Warnings(this), new ChatAFK(),
-                new GameEndListener(), new DefaultStatsHandler()
+                new GameEndListener(), new DefaultStatsHandler(), new PickupItemListener()
         );
 
         if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_HEAL_POOL_ENABLE)) {

@@ -466,4 +466,101 @@ public abstract class VersionSupport {
     public abstract void placeLadder(Block b, int x, int y, int z, IArena a, int ladderdata);
 
     public abstract void playVillagerEffect(Player player, Location location);
+
+    /**
+     * Display particle effect at location
+     * For 1.8 versions, this will send packets to all players in the world
+     * For newer versions, this will use the spawnParticle method
+     */
+    public abstract void displayParticle(Player player, String particle, Location location, int amount);
+
+    /**
+     * Check if the item is a modded item (from forge mods)
+     * Used for MohistMC Forge support
+     */
+    public boolean isModdedItem(ItemStack itemStack) {
+        if (itemStack == null || itemStack.getType() == Material.AIR) {
+            return false;
+        }
+        
+        // 在 1.13+ 版本中，尝试获取物品的命名空间键
+        try {
+            // 首先尝试使用 name() 方法，然后转换为小写
+            String materialName = itemStack.getType().name().toLowerCase();
+            
+            // 如果材质名称包含下划线，可能是模组物品的内部表示
+            // 但这种方法不够准确，所以我们还是使用更简单的检查
+            String materialString = itemStack.getType().toString();
+            
+            // 检查是否包含命名空间分隔符且不是 minecraft 命名空间
+            return materialString.contains(":") && !materialString.startsWith("minecraft:");
+        } catch (Exception e) {
+            // 如果出现任何异常，假设它是原版物品
+            return false;
+        }
+    }
+
+    /**
+     * Create item stack with raw NBT support
+     * Supports both vanilla and modded items
+     */
+    public abstract ItemStack createItemStackWithNBT(String material, int amount, short data, String rawNBT);
+
+    /**
+     * Apply raw NBT string to an existing item stack
+     * For advanced item configuration
+     */
+    public abstract ItemStack applyRawNBT(ItemStack itemStack, String rawNBT);
+
+    /**
+     * Get the full NBT as string from an item stack
+     * Useful for debugging and configuration
+     */
+    public abstract String getRawNBT(ItemStack itemStack);
+
+    /**
+     * Check if server is running MohistMC or similar Forge hybrid
+     */
+    public boolean isMohistMC() {
+        try {
+            Class.forName("com.mohistmc.api.ServerAPI");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Create a modded item stack if running on MohistMC
+     * Falls back to vanilla behavior otherwise
+     */
+    public ItemStack createModdedItemStack(String modId, String itemName, int amount, short data) {
+        if (isMohistMC()) {
+            try {
+                // 使用正确的命名空间格式: modid:itemname
+                String namespacedKey = modId.toLowerCase() + ":" + itemName.toLowerCase();
+                Material material = Material.matchMaterial(namespacedKey);
+                
+                if (material != null) {
+                    getPlugin().getLogger().info("Successfully created modded item: " + namespacedKey);
+                    return new ItemStack(material, amount, data);
+                } else {
+                    // 如果命名空间格式失败，尝试不带命名空间的格式（某些模组可能注册为普通材质）
+                    material = Material.matchMaterial(itemName.toUpperCase());
+                    if (material != null) {
+                        getPlugin().getLogger().info("Found modded item without namespace: " + itemName);
+                        return new ItemStack(material, amount, data);
+                    }
+                }
+            } catch (Exception e) {
+                getPlugin().getLogger().warning("Error creating modded item " + modId + ":" + itemName + " - " + e.getMessage());
+            }
+            
+            // 如果都失败了，回退到基岩
+            getPlugin().getLogger().warning("Modded item " + modId + ":" + itemName + " not found, falling back to BEDROCK");
+            return new ItemStack(Material.BEDROCK, amount);
+        }
+        // 不在 MohistMC 上运行，返回基岩作为占位符
+        return new ItemStack(Material.BEDROCK, amount);
+    }
 }

@@ -48,6 +48,7 @@ public class ArenaConfig extends ConfigManager {
         yml.addDefault("minPlayers", 2);
         yml.addDefault("maxInTeam", 1);
         yml.addDefault("allowSpectate", true);
+        yml.addDefault(ConfigPath.ARENA_ENABLE_XP, false);
         yml.addDefault(ConfigPath.ARENA_SPAWN_PROTECTION, 5);
         yml.addDefault(ConfigPath.ARENA_SHOP_PROTECTION, 1);
         yml.addDefault(ConfigPath.ARENA_UPGRADES_PROTECTION, 1);

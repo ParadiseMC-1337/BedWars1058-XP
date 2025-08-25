@@ -886,6 +886,7 @@ public class Russian extends Language{
         yml.addDefault(Messages.MEANING_DIAMOND_PLURAL, "Алмазов");
         yml.addDefault(Messages.MEANING_VAULT_SINGULAR, "$");
         yml.addDefault(Messages.MEANING_VAULT_PLURAL, "$");
+        yml.addDefault(Messages.MEANING_EXP, "经验");
 
         yml.addDefault(Messages.COMMAND_JOIN_USAGE, "§a▪ §7Используйте: /" + mainCmd + " join §o<арена/тип>");
         yml.addDefault(Messages.COMMAND_NOT_ALLOWED_IN_GAME, "{prefix}&cВы не можете этого сделать.");
@@ -1139,6 +1140,8 @@ public class Russian extends Language{
                                                                                                                                                            // Добавлено Matveev_: не ебу
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_TITLE + "3", "&c&lВНИМАНИЕ!!!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_SUBTITLE + "3", "&fЛовушка была активирована командой {color}{team} &f!");
+        yml.addDefault(Messages.SPECIAL_ITEMS_RESCUE_PLATFORM_CREATE_FAILED, "&c你不能在这使用自救平台");
+        yml.addDefault(Messages.SPECIAL_ITEMS_PROTECTION_WALL_CREATE_FAILED, "&c你不能在这使用防守墙");
         save();
         setPrefix(m(Messages.PREFIX));
         setPrefixStatic(m(Messages.PREFIX));

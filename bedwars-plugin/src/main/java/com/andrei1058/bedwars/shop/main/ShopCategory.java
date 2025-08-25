@@ -39,6 +39,11 @@ import java.util.UUID;
 
 import static com.andrei1058.bedwars.BedWars.nms;
 
+/**
+ * 代表商店中的一个商品类别，例如"方块"、"武器"等。
+ * 这个类负责加载该类别下的所有内容 ({@link CategoryContent})，
+ * 并处理当玩家点击该类别时，打开对应的商品列表界面的逻辑。
+ */
 public class ShopCategory {
 
     private int slot;
@@ -50,7 +55,9 @@ public class ShopCategory {
     private final String name;
 
     /**
-     * Load a shop category from the given path
+     * 从给定的配置文件路径加载一个商店类别。
+     * @param path 在配置文件中的路径。
+     * @param yml  配置文件实例。
      */
     public ShopCategory(String path, YamlConfiguration yml) {
         BedWars.debug("Loading shop category: " + path);
@@ -67,6 +74,7 @@ public class ShopCategory {
         }
         slot = yml.getInt(path + ConfigPath.SHOP_CATEGORY_SLOT);
 
+        // 检查槽位是否有效且未被占用
         if (slot < 1 || slot > 8) {
             BedWars.plugin.getLogger().severe("Slot must be n > 1 and n < 9 at: " + path);
             return;
@@ -79,6 +87,7 @@ public class ShopCategory {
             }
         }
 
+        // 创建类别预览物品
         itemStack = BedWars.nms.createItemStack(yml.getString(path + ConfigPath.SHOP_CATEGORY_ITEM_MATERIAL),
                 yml.get(path + ConfigPath.SHOP_CATEGORY_ITEM_AMOUNT) == null ? 1 : yml.getInt(path + ConfigPath.SHOP_CATEGORY_ITEM_AMOUNT),
                 (short) (yml.get(path + ConfigPath.SHOP_CATEGORY_ITEM_DATA) == null ? 0 : yml.getInt(path + ConfigPath.SHOP_CATEGORY_ITEM_DATA)));
@@ -90,6 +99,7 @@ public class ShopCategory {
             }
         }
 
+        // 为预览物品设置药水相关的 NBT 标签
         // potion display color based on NBT tag
         if (yml.getString(path + ".category-item.potion-display") != null && !yml.getString(path + ".category-item.potion-display").isEmpty()) {
             itemStack = nms.setTag(itemStack, "Potion", yml.getString(path + ".category-item.potion-display"));
@@ -103,11 +113,13 @@ public class ShopCategory {
             itemStack.setItemMeta(ShopManager.hideItemStuff(itemStack.getItemMeta()));
         }
 
+        // 初始化语言文件路径
         itemNamePath = Messages.SHOP_CATEGORY_ITEM_NAME.replace("%category%", path);
         itemLorePath = Messages.SHOP_CATEGORY_ITEM_LORE.replace("%category%", path);
         invNamePath = Messages.SHOP_CATEGORY_INVENTORY_NAME.replace("%category%", path);
         loaded = true;
 
+        // 加载该类别下的所有内容
         CategoryContent cc;
         for (String s : yml.getConfigurationSection(path + "." + ConfigPath.SHOP_CATEGORY_CONTENT_PATH).getKeys(false)) {
             cc = new CategoryContent(path + ConfigPath.SHOP_CATEGORY_CONTENT_PATH + "." + s, s, path, yml, this);
@@ -118,12 +130,19 @@ public class ShopCategory {
         }
     }
 
+    /**
+     * 为玩家打开此类别界面。
+     * @param player    目标玩家。
+     * @param index     主商店界面实例。
+     * @param shopCache 玩家的商店缓存。
+     */
     public void open(Player player, ShopIndex index, ShopCache shopCache){
         if (player.getOpenInventory().getTopInventory() == null) return;
         ShopIndex.indexViewers.remove(player.getUniqueId());
 
         Inventory inv = Bukkit.createInventory(null, index.getInvSize(), Language.getMsg(player, invNamePath));
 
+        // 重新添加主界面的按钮和分隔符
         inv.setItem(index.getQuickBuyButton().getSlot(), index.getQuickBuyButton().getItemStack(player));
 
         for (ShopCategory sc : index.getCategoryList()) {
@@ -132,10 +151,12 @@ public class ShopCategory {
 
         index.addSeparator(player, inv);
 
+        // 添加表示当前选定类别的指示器
         inv.setItem(getSlot() + 9, index.getSelectedItem(player));
 
         shopCache.setSelectedCategory(getSlot());
 
+        // 添加该类别下的所有商品内容
         for (CategoryContent cc : getCategoryContentList()) {
             inv.setItem(cc.getSlot(), cc.getItemStack(player, shopCache));
         }
@@ -147,7 +168,9 @@ public class ShopCategory {
     }
 
     /**
-     * Get the category preview item in player's language
+     * 获取为特定玩家生成的、带有本地化文本的类别预览物品。
+     * @param player 目标玩家。
+     * @return 带有正确名称和 lore 的 ItemStack。
      */
     public ItemStack getItemStack(Player player) {
         ItemStack i = itemStack.clone();
@@ -161,24 +184,32 @@ public class ShopCategory {
     }
 
     /**
-     * Check if category was loaded
+     * 检查类别是否已成功加载。
      */
     public boolean isLoaded() {
         return loaded;
     }
 
     /**
-     * Get category slot in shop index
+     * 获取类别在商店主界面中的槽位。
      */
     public int getSlot() {
         return slot;
     }
 
+    /**
+     * 获取该类别下的所有商品内容列表。
+     */
     public List<CategoryContent> getCategoryContentList() {
         return categoryContentList;
     }
 
-    /**Get a category content by identifier*/
+    /**
+     * 根据标识符从所有类别中获取一个商品内容。
+     * @param identifier 商品内容的唯一标识符。
+     * @param shopIndex  主商店界面实例。
+     * @return 如果找到则返回 {@link CategoryContent}，否则返回 null。
+     */
     public static CategoryContent getCategoryContent(String identifier, ShopIndex shopIndex){
         for (ShopCategory sc : shopIndex.getCategoryList()){
             for (CategoryContent cc : sc.getCategoryContentList()){
@@ -188,10 +219,16 @@ public class ShopCategory {
         return null;
     }
 
+    /**
+     * 获取类别的名称（通常是其在配置文件中的路径）。
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * 获取当前正在查看此类别界面的玩家列表。
+     */
     public static List<UUID> getCategoryViewers() {
         return new ArrayList<>(categoryViewers);
     }

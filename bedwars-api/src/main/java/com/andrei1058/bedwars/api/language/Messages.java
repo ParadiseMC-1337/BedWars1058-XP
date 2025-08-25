@@ -303,6 +303,7 @@ public class Messages {
     public static String MEANING_VAULT_SINGULAR = "meaning-vault-singular";
     public static String MEANING_VAULT_PLURAL = "meaning-vault-plural";
     public static String MEANING_NO_TRAP = "meaning-no-trap";
+    public static String MEANING_EXP = "meaning-exp";
 
     /**
      * Scoreboard related
@@ -474,6 +475,13 @@ public class Messages {
     /* Arena waiting Items Messages */
     public static final String GENERAL_CONFIGURATION_WAITING_ITEMS_NAME = ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH + "-%path%-name";
     public static final String GENERAL_CONFIGURATION_WAITING_ITEMS_LORE = ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH + "-%path%-lore";
+
+
+
+
+    public static final String SPECIAL_ITEMS_RESCUE_PLATFORM_CREATE_FAILED = "special-items.rescue-platform.create-failed";
+
+    public static final String SPECIAL_ITEMS_PROTECTION_WALL_CREATE_FAILED = "special-items.protection-wall.create-failed";
 
 
 

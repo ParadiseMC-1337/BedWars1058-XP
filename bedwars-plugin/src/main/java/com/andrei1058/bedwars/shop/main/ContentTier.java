@@ -35,6 +35,13 @@ import java.util.List;
 
 import static com.andrei1058.bedwars.BedWars.nms;
 
+/**
+ * 代表商店内容的单个层级（Tier）。
+ * <p>
+ * 例如，"剑"这个 {@link CategoryContent} 可能有多个层级：
+ * Tier 1: 木剑, Tier 2: 石剑, Tier 3: 铁剑。
+ * 这个类定义了每一层级的具体属性，如价格、货币、获得的物品和预览图标。
+ */
 @SuppressWarnings("WeakerAccess")
 public class ContentTier implements IContentTier {
 
@@ -45,7 +52,11 @@ public class ContentTier implements IContentTier {
     private boolean loaded = false;
 
     /**
-     * Create a content tier for a category content
+     * 为一个商店内容创建一个层级。
+     * @param path       在配置文件中的路径。
+     * @param tierName   层级的名称 (例如 "tier1", "tier2")。
+     * @param identifier 所属内容的唯一标识符。
+     * @param yml        配置文件实例。
      */
     public ContentTier(String path, String tierName, String identifier, YamlConfiguration yml) {
         BedWars.debug("Loading content tier" + path);
@@ -55,6 +66,7 @@ public class ContentTier implements IContentTier {
             return;
         }
 
+        // 从 "tier1" 中解析出数字 1
         try {
             value = Integer.parseInt(tierName.replace("tier", ""));
         } catch (Exception e) {
@@ -78,6 +90,7 @@ public class ContentTier implements IContentTier {
             return;
         }
 
+        // 解析货币类型
         switch (yml.getString(path + ConfigPath.SHOP_CONTENT_TIER_SETTINGS_CURRENCY).toLowerCase()) {
             case "iron":
             case "gold":
@@ -92,6 +105,7 @@ public class ContentTier implements IContentTier {
                 break;
         }
 
+        // 创建预览物品
         itemStack = BedWars.nms.createItemStack(yml.getString(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_MATERIAL),
                 yml.get(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_AMOUNT) == null ? 1 : yml.getInt(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_AMOUNT),
                 (short) (yml.get(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_DATA) == null ? 0 : yml.getInt(path + ConfigPath.SHOP_CONTENT_TIER_ITEM_DATA)));
@@ -103,6 +117,7 @@ public class ContentTier implements IContentTier {
             }
         }
 
+        // 为预览物品设置药水效果相关的 NBT 标签
         // potion display color based on NBT tag
         if (yml.getString(path + ".tier-item.potion-display") != null && !yml.getString(path + ".tier-item.potion-display").isEmpty()) {
             itemStack = nms.setTag(itemStack, "Potion", yml.getString(path + ".tier-item.potion-display"));
@@ -116,6 +131,7 @@ public class ContentTier implements IContentTier {
             itemStack.setItemMeta(ShopManager.hideItemStuff(itemStack.getItemMeta()));
         }
 
+        // 加载购买此层级后实际获得的物品或执行的命令
         IBuyItem bi;
         if (yml.get(path + "." + ConfigPath.SHOP_CONTENT_BUY_ITEMS_PATH) != null) {
             for (String s : yml.getConfigurationSection(path + "." + ConfigPath.SHOP_CONTENT_BUY_ITEMS_PATH).getKeys(false)) {
@@ -136,70 +152,70 @@ public class ContentTier implements IContentTier {
     }
 
     /**
-     * Get tier price
+     * 获取层级价格。
      */
     public int getPrice() {
         return price;
     }
 
     /**
-     * Get tier currency
+     * 获取层级货币。
      */
     public Material getCurrency() {
         return currency;
     }
 
     /**
-     * Set tier currency.
+     * 设置层级货币。
      */
     public void setCurrency(Material currency) {
         this.currency = currency;
     }
 
     /**
-     * Set tier price.
+     * 设置层级价格。
      */
     public void setPrice(int price) {
         this.price = price;
     }
 
     /**
-     * Set tier preview item.
+     * 设置层级预览物品。
      */
     public void setItemStack(ItemStack itemStack) {
         this.itemStack = itemStack;
     }
 
     /**
-     * Set list of items that you receive on buy.
+     * 设置购买后收到的物品列表。
      */
     public void setBuyItemsList(List<IBuyItem> buyItemsList) {
         this.buyItemsList = buyItemsList;
     }
 
     /**
-     * Get item stack with name and lore in player's language
+     * 获取在商店中显示的预览物品。
      */
     public ItemStack getItemStack() {
         return itemStack;
     }
 
     /**
-     * Get tier level
+     * 获取层级等级（例如 1, 2, 3）。
      */
     public int getValue() {
         return value;
     }
 
     /**
-     * Check if tier is loaded
+     * 检查层级是否已成功加载。
      */
     public boolean isLoaded() {
         return loaded;
     }
 
     /**
-     * Get items
+     * 获取购买此层级后将收到的物品或执行的命令的列表。
      */
     public List<IBuyItem> getBuyItemsList() {
         return buyItemsList;

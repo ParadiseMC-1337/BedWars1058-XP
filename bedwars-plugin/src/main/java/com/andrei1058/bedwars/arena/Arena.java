@@ -753,6 +753,7 @@ public class Arena implements IArena {
         debug("Player removed: " + p.getName() + " arena: " + getArenaName());
         respawnSessions.remove(p);
 
+
         ITeam team = null;
 
         Arena.afkCheck.remove(p.getUniqueId());
@@ -1215,6 +1216,8 @@ public class Arena implements IArena {
         }
         plugin.getLogger().log(Level.FINE, "Restarting arena: " + getArenaName());
         Bukkit.getPluginManager().callEvent(new ArenaRestartEvent(getArenaName(), getWorldName()));
+
+        
         for (Player inWorld : getWorld().getPlayers()) {
             inWorld.kickPlayer("You're not supposed to be here.");
         }
@@ -2384,6 +2387,24 @@ public class Arena implements IArena {
         return fireballCooldowns;
     }
 
+    private final Map<UUID, Long> warpPowderCooldowns = new HashMap<>();
+
+    public Map<UUID, Long> getWarpPowderCooldowns() {
+        return warpPowderCooldowns;
+    }
+
+    private final Map<UUID, Long> protectionWallCooldowns = new HashMap<>();
+
+    public Map<UUID, Long> getProtectionWallCooldowns() {
+        return protectionWallCooldowns;
+    }
+
+    private final Map<UUID, Long> rescuePlatformCooldowns = new HashMap<>();
+
+    public Map<UUID, Long> getRescuePlatformCooldowns() {
+        return rescuePlatformCooldowns;
+    }
+
     public void destroyData() {
         destroyReJoins();
         if (worldName != null) arenaByIdentifier.remove(worldName);
@@ -2428,6 +2449,9 @@ public class Arena implements IArena {
         moneyperMinuteTask = null;
         leaving.clear();
         fireballCooldowns.clear();
+        warpPowderCooldowns.clear();
+        rescuePlatformCooldowns.clear();
+        protectionWallCooldowns.clear();
     }
 
     /**

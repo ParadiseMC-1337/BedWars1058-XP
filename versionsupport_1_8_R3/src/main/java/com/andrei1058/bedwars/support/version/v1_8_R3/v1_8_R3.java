@@ -777,4 +777,145 @@ public class v1_8_R3 extends VersionSupport {
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(pwp);
     }
 
+    @Override
+    public void displayParticle(Player player, String particle, Location location, int amount) {
+        try {
+            EnumParticle enumParticle;
+            // Map common particle names to 1.8 enum values
+            switch (particle.toUpperCase()) {
+                case "FIREWORKS_SPARK":
+                case "FIREWORK_SHOOT":
+                    enumParticle = EnumParticle.FIREWORKS_SPARK;
+                    break;
+                case "VILLAGER_HAPPY":
+                    enumParticle = EnumParticle.VILLAGER_HAPPY;
+                    break;
+                case "REDSTONE":
+                    enumParticle = EnumParticle.REDSTONE;
+                    break;
+                case "FLAME":
+                    enumParticle = EnumParticle.FLAME;
+                    break;
+                case "SMOKE_NORMAL":
+                    enumParticle = EnumParticle.SMOKE_NORMAL;
+                    break;
+                case "EXPLOSION_NORMAL":
+                    enumParticle = EnumParticle.EXPLOSION_NORMAL;
+                    break;
+                case "SPELL":
+                    enumParticle = EnumParticle.SPELL;
+                    break;
+                case "HEART":
+                    enumParticle = EnumParticle.HEART;
+                    break;
+                default:
+                    // Try to parse as enum directly
+                    enumParticle = EnumParticle.valueOf(particle.toUpperCase());
+                    break;
+            }
+            
+            PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(
+                enumParticle, 
+                true, 
+                (float) location.getX(), 
+                (float) location.getY(), 
+                (float) location.getZ(), 
+                0.0f, 0.0f, 0.0f, 
+                0.0f, 
+                amount
+            );
+            
+            // Send to all players in the world
+            for (Player worldPlayer : location.getWorld().getPlayers()) {
+                ((CraftPlayer) worldPlayer).getHandle().playerConnection.sendPacket(particlePacket);
+            }
+        } catch (Exception e) {
+            // Fallback to VILLAGER_HAPPY if particle not found
+            PacketPlayOutWorldParticles fallbackPacket = new PacketPlayOutWorldParticles(
+                EnumParticle.VILLAGER_HAPPY, 
+                true, 
+                (float) location.getX(), 
+                (float) location.getY(), 
+                (float) location.getZ(), 
+                0.0f, 0.0f, 0.0f, 
+                0.0f, 
+                amount
+            );
+            
+            for (Player worldPlayer : location.getWorld().getPlayers()) {
+                ((CraftPlayer) worldPlayer).getHandle().playerConnection.sendPacket(fallbackPacket);
+            }
+        }
+    }
+
+    @Override
+    public String getRawNBT(org.bukkit.inventory.ItemStack itemStack) {
+        net.minecraft.server.v1_8_R3.ItemStack i = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound tag = i.getTag();
+        return tag == null ? "{}" : tag.toString();
+    }
+
+    @Override
+    public org.bukkit.inventory.ItemStack createItemStackWithNBT(String material, int amount, short data, String rawNBT) {
+        org.bukkit.inventory.ItemStack itemStack = createItemStack(material, amount, data);
+        if (rawNBT != null && !rawNBT.isEmpty() && !rawNBT.equals("{}")) {
+            return applyRawNBT(itemStack, rawNBT);
+        }
+        return itemStack;
+    }
+
+    @Override
+    public org.bukkit.inventory.ItemStack applyRawNBT(org.bukkit.inventory.ItemStack itemStack, String rawNBT) {
+        if (rawNBT == null || rawNBT.isEmpty() || rawNBT.equals("{}")) {
+            return itemStack;
+        }
+        
+        try {
+            net.minecraft.server.v1_8_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
+            NBTTagCompound tag = nmsItem.getTag();
+            if (tag == null) {
+                tag = new NBTTagCompound();
+            }
+            
+            // Simple parsing for basic NBT format like {CustomModelData:123456}
+            if (rawNBT.startsWith("{") && rawNBT.endsWith("}")) {
+                String content = rawNBT.substring(1, rawNBT.length() - 1);
+                String[] pairs = content.split(",");
+                
+                for (String pair : pairs) {
+                    String[] keyValue = pair.split(":");
+                    if (keyValue.length == 2) {
+                        String key = keyValue[0].trim();
+                        String value = keyValue[1].trim();
+                        
+                        // Try to parse as different types
+                        if (value.matches("-?\\d+")) {
+                            // Integer
+                            tag.setInt(key, Integer.parseInt(value));
+                        } else if (value.matches("-?\\d+\\.\\d+")) {
+                            // Double
+                            tag.setDouble(key, Double.parseDouble(value));
+                        } else if (value.equals("true") || value.equals("false")) {
+                            // Boolean (represented as byte in NBT)
+                            tag.setByte(key, (byte) (Boolean.parseBoolean(value) ? 1 : 0));
+                        } else {
+                            // String (remove quotes if present)
+                            if (value.startsWith("\"") && value.endsWith("\"")) {
+                                value = value.substring(1, value.length() - 1);
+                            }
+                            tag.setString(key, value);
+                        }
+                    }
+                }
+                
+                nmsItem.setTag(tag);
+                return CraftItemStack.asBukkitCopy(nmsItem);
+            }
+        } catch (Exception e) {
+            getPlugin().getLogger().warning("Failed to parse NBT string: " + rawNBT + " - " + e.getMessage());
+        }
+        
+        return itemStack;
+    }
+
 }

@@ -34,22 +34,33 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 代表一个在购买时会执行预设命令的商店物品。
+ * 这允许商店物品触发插件内部或外部的各种操作。
+ */
 public class BuyCommand implements IBuyItem {
 
     private final List<String> asPlayer = new ArrayList<>();
     private final List<String> asConsole = new ArrayList<>();
     private final String upgradeIdentifier;
 
-
+    /**
+     * 从配置文件中加载一个购买命令项。
+     * @param path              在配置文件中的路径。
+     * @param yml               配置文件实例。
+     * @param upgradeIdentifier 升级标识符，用于跟踪物品升级。
+     */
     public BuyCommand(String path, YamlConfiguration yml, String upgradeIdentifier) {
         BedWars.debug("Loading BuyCommand: " + path);
         this.upgradeIdentifier = upgradeIdentifier;
+        // 加载控制台执行的命令
         for (String cmd : yml.getStringList(path + ".as-console")) {
             if (cmd.startsWith("/")) {
                 cmd = cmd.replaceFirst("/", "");
             }
             asConsole.add(cmd);
         }
+        // 加载玩家执行的命令
         for (String cmd : yml.getStringList(path + ".as-player")) {
             if (!cmd.startsWith("/")) {
                 cmd = "/" + cmd;
@@ -63,6 +74,11 @@ public class BuyCommand implements IBuyItem {
         return true;
     }
 
+    /**
+     * 当玩家购买此物品时执行命令。
+     * @param player 购买的玩家。
+     * @param arena  玩家所在的竞技场。
+     */
     @Override
     public void give(Player player, IArena arena) {
         BedWars.debug("Giving BuyCMD: " + getUpgradeIdentifier() + " to: " + player.getName());
@@ -76,6 +92,8 @@ public class BuyCommand implements IBuyItem {
         String arenaWorld = arena.getWorldName();
         String arenaDisplay = arena.getDisplayName();
         String arenaGroup = arena.getGroup();
+
+        // 替换占位符并以玩家身份执行命令
         for (String playerCmd : asPlayer) {
             player.chat(playerCmd.replace("{player}", playerName)
                     .replace("{player_uuid}", playerUUID)
@@ -84,6 +102,7 @@ public class BuyCommand implements IBuyItem {
                     .replace("{arena_world}", arenaWorld).replace("{arena_display}", arenaDisplay)
                     .replace("{arena_group}", arenaGroup));
         }
+        // 替换占位符并以控制台身份执行命令
         for (String consoleCmd : asConsole) {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), consoleCmd
                     .replace("{player}", playerName).replace("{player_uuid}", playerUUID)
@@ -99,6 +118,7 @@ public class BuyCommand implements IBuyItem {
         return upgradeIdentifier;
     }
 
+    // 这些方法对于命令物品没有实际意义，但需要实现接口。
     @Override
     public ItemStack getItemStack() {
         return null;
@@ -106,7 +126,7 @@ public class BuyCommand implements IBuyItem {
 
     @Override
     public void setItemStack(ItemStack itemStack) {
-
+        // 命令物品没有 ItemStack
     }
 
     @Override
@@ -116,7 +136,7 @@ public class BuyCommand implements IBuyItem {
 
     @Override
     public void setAutoEquip(boolean autoEquip) {
-
+        // 命令物品不能被装备
     }
 
     @Override
@@ -126,7 +146,7 @@ public class BuyCommand implements IBuyItem {
 
     @Override
     public void setPermanent(boolean permanent) {
-
+        // 命令物品不是永久性的
     }
 
     @Override
@@ -136,5 +156,6 @@ public class BuyCommand implements IBuyItem {
 
     @Override
     public void setUnbreakable(boolean unbreakable) {
+        // 命令物品没有耐久度
     }
 }

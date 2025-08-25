@@ -210,6 +210,7 @@ public class Persian extends Language {
         yml.addDefault(Messages.MEANING_DIAMOND_PLURAL, "Diamond");
         yml.addDefault(Messages.MEANING_VAULT_SINGULAR, "$");
         yml.addDefault(Messages.MEANING_VAULT_PLURAL, "$");
+        yml.addDefault(Messages.MEANING_EXP, "经验");
         yml.addDefault(Messages.INTERACT_CANNOT_PLACE_BLOCK, "{prefix}&cShoma Nemitavanid Inja Block Bezarid.");
         yml.addDefault(Messages.INTERACT_CANNOT_BREAK_BLOCK, "{prefix}&cFaghat Block Hayi Ke Player Ha Gozashtan Ghabele Kandan Ast.");
         yml.addDefault(Messages.INTERACT_CANNOT_BREAK_OWN_BED, "&cShoma Nemitavanid Bed Khodetoon Ra Bekanid.");
@@ -1113,6 +1114,8 @@ public class Persian extends Language {
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_MSG + "3", "&c&lHoshdar Tale Tavasote &7&l{player} &c&laz team {color}&l{team} &c&lGheyre Faal Shod!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_TITLE + "3", "&c&lHOSHDAR!!!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_SUBTITLE + "3", "&fAlarm Tale Tavasote Team {color}{team} &fGheyre Faal Shod!");
+        yml.addDefault(Messages.SPECIAL_ITEMS_RESCUE_PLATFORM_CREATE_FAILED, "&c你不能在这使用自救平台");
+        yml.addDefault(Messages.SPECIAL_ITEMS_PROTECTION_WALL_CREATE_FAILED, "&c你不能在这使用防守墙");
         save();
         setPrefix(m(Messages.PREFIX));
         setPrefixStatic(m(Messages.PREFIX));

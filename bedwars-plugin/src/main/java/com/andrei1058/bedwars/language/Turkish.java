@@ -210,6 +210,7 @@ public class Turkish extends Language {
         yml.addDefault(Messages.MEANING_DIAMOND_PLURAL, "Elmas");
         yml.addDefault(Messages.MEANING_VAULT_SINGULAR, "₺");
         yml.addDefault(Messages.MEANING_VAULT_PLURAL, "₺");
+        yml.addDefault(Messages.MEANING_EXP, "经验");
         yml.addDefault(Messages.INTERACT_CANNOT_PLACE_BLOCK, "{prefix}&cBuraya blok koyamazsın!");
         yml.addDefault(Messages.INTERACT_CANNOT_BREAK_BLOCK, "{prefix}&cSadece oyuncular tarafından yerleştirilen blokları kırabilirsin!");
         yml.addDefault(Messages.INTERACT_CANNOT_BREAK_OWN_BED, "&cKendi yatağını kıramazsın!");
@@ -1105,6 +1106,8 @@ public class Turkish extends Language {
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_MSG + "3", "&c&lAlarm, {color}&l{team} &c&ltakımdaki &7&l{player} &c&ltarafından tetiklendi!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_TITLE + "3", "&c&lALARM!!!");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_SUBTITLE + "3", "&fAlarm, {color}{team} &fTakım tarafından tetiklendi!");
+        yml.addDefault(Messages.SPECIAL_ITEMS_RESCUE_PLATFORM_CREATE_FAILED, "&c你不能在这使用自救平台");
+        yml.addDefault(Messages.SPECIAL_ITEMS_PROTECTION_WALL_CREATE_FAILED, "&c你不能在这使用防守墙");
         save();
         setPrefix(m(Messages.PREFIX));
         setPrefixStatic(m(Messages.PREFIX));

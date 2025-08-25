@@ -25,6 +25,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+/**
+ * 代表商店界面中的"快速购买"按钮。
+ * 这个类存储了按钮的槽位、基础物品以及用于显示名称和Lore的语言路径。
+ */
 public class QuickBuyButton {
 
     private int slot;
@@ -32,12 +36,12 @@ public class QuickBuyButton {
     private String namePath, lorePath;
 
     /**
-     * Create a new quick buy button
+     * 创建一个新的快速购买按钮。
      *
-     * @param namePath  Language name path
-     * @param lorePath  Language lore path.
-     * @param slot      Item slot in inventory
-     * @param itemStack Button ItemStack preview
+     * @param slot      按钮在GUI中的槽位。
+     * @param itemStack 按钮的基础 ItemStack 预览。
+     * @param namePath  按钮名称的语言文件路径。
+     * @param lorePath  按钮 lore 的语言文件路径。
      */
     public QuickBuyButton(int slot, ItemStack itemStack, String namePath, String lorePath) {
         this.slot = slot;
@@ -47,7 +51,9 @@ public class QuickBuyButton {
     }
 
     /**
-     * Get the quick buy button in the player's language
+     * 获取为特定玩家生成的、带有本地化文本的快速购买按钮物品。
+     * @param player 目标玩家。
+     * @return 带有正确名称和 lore 的 ItemStack。
      */
     public ItemStack getItemStack(Player player) {
         ItemStack i = itemStack.clone();
@@ -61,7 +67,7 @@ public class QuickBuyButton {
     }
 
     /**
-     * Get quick buy item slot
+     * 获取快速购买按钮所在的槽位。
      */
     public int getSlot() {
         return slot;

@@ -36,6 +36,7 @@ import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.api.util.BlastProtectionUtil;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.configuration.Sounds;
+import com.andrei1058.bedwars.special.RescuePlatform;
 import com.andrei1058.bedwars.support.paper.TeleportManager;
 import com.andrei1058.bedwars.popuptower.TowerEast;
 import com.andrei1058.bedwars.popuptower.TowerNorth;
@@ -268,6 +269,14 @@ public class BreakPlace implements Listener {
                 e.setCancelled(true);
                 return;
             }
+
+            if (RescuePlatform.isRescuePlatformBlock(e.getBlock())) {
+                e.setCancelled(true);
+                return;
+            }
+
+            // 防守墙现在强制可破坏，不需要检查
+            // Protection walls are now always breakable, no need to check
 
             // allow breaking of grass
             // drops are removed in another event

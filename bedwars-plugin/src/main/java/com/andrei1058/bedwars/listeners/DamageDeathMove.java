@@ -64,6 +64,8 @@ import java.util.Map;
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
 import static com.andrei1058.bedwars.arena.LastHit.getLastHit;
+import static com.andrei1058.bedwars.special.WarpPowder.getWarpTask;
+import static com.andrei1058.bedwars.special.WarpPowder.isWarping;
 
 public class DamageDeathMove implements Listener {
 
@@ -114,6 +116,11 @@ public class DamageDeathMove implements Listener {
                     } else BedWarsTeam.reSpawnInvulnerability.remove(p.getUniqueId());
                 }
                 //}
+
+                if (isWarping(p)) {
+                    BedWars.debug("Cancelling WarpPowder for " + p.getName() + " due to damage.");
+                    getWarpTask(p).cancel(true);
+                }
 
             }
         }
@@ -326,6 +333,7 @@ public class DamageDeathMove implements Listener {
 
     @EventHandler
     public void onDeath(@NotNull PlayerDeathEvent e) {
+        e.setDroppedExp(0);
         Player victim = e.getEntity(), killer = e.getEntity().getKiller();
         ITeam killersTeam = null;
         IArena a = Arena.getArenaByPlayer(victim);
@@ -351,6 +359,11 @@ public class DamageDeathMove implements Listener {
             if (victimsTeam == null) {
                 victim.spigot().respawn();
                 return;
+            }
+
+            if (isWarping(victim)) {
+                BedWars.debug("Cancelling WarpPowder for " + victim.getName() + " due to death.");
+                getWarpTask(victim).cancel(true);
             }
 
             BedWars.nms.clearArrowsFromPlayerBody(victim);
@@ -479,7 +492,7 @@ public class DamageDeathMove implements Listener {
             }
 
             // handle drops
-            if (PlayerDrops.handlePlayerDrops(a, victim, killer, victimsTeam, killersTeam, cause, e.getDrops())) {
+            if (    PlayerDrops.handlePlayerDrops(a, victim, killer, victimsTeam, killersTeam, cause, e.getDrops())) {
                 e.getDrops().clear();
             }
 
@@ -570,6 +583,13 @@ public class DamageDeathMove implements Listener {
     public void onMove(PlayerMoveEvent e) {
         if (Arena.isInArena(e.getPlayer())) {
             IArena a = Arena.getArenaByPlayer(e.getPlayer());
+
+            if (isWarping(e.getPlayer())) {
+                if ((int) e.getFrom().getX() != (int) e.getTo().getX() || (int) e.getFrom().getY() != (int) e.getTo().getY() || (int) e.getFrom().getZ() != (int) e.getTo().getZ()) {
+                    BedWars.debug("Cancelling WarpPowder for " + e.getPlayer().getName() + " due to movement.");
+                    getWarpTask(e.getPlayer()).cancel(true);
+                }
+            }
 
             // todo check on x y z change... not head rotation because this is really spammy
             if (e.getFrom().getChunk().getX() != e.getTo().getChunk().getX() ||

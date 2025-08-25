@@ -773,4 +773,123 @@ public class v1_17_R1 extends VersionSupport {
         player.spawnParticle(Particle.VILLAGER_HAPPY, location, 1);
     }
 
+    @Override
+    public void displayParticle(Player player, String particle, Location location, int amount) {
+        try {
+            org.bukkit.Particle bukkitParticle;
+            // Map common particle names to 1.16 Bukkit Particle enum
+            switch (particle.toUpperCase()) {
+                case "FIREWORKS_SPARK":
+                case "FIREWORK_SHOOT":
+                    bukkitParticle = org.bukkit.Particle.FIREWORKS_SPARK;
+                    break;
+                case "VILLAGER_HAPPY":
+                    bukkitParticle = org.bukkit.Particle.VILLAGER_HAPPY;
+                    break;
+                case "REDSTONE":
+                    bukkitParticle = org.bukkit.Particle.REDSTONE;
+                    break;
+                case "FLAME":
+                    bukkitParticle = org.bukkit.Particle.FLAME;
+                    break;
+                case "SMOKE_NORMAL":
+                    bukkitParticle = org.bukkit.Particle.SMOKE_NORMAL;
+                    break;
+                case "EXPLOSION_NORMAL":
+                    bukkitParticle = org.bukkit.Particle.EXPLOSION_NORMAL;
+                    break;
+                case "SPELL":
+                    bukkitParticle = org.bukkit.Particle.SPELL;
+                    break;
+                case "HEART":
+                    bukkitParticle = org.bukkit.Particle.HEART;
+                    break;
+                default:
+                    // Try to parse as enum directly
+                    bukkitParticle = org.bukkit.Particle.valueOf(particle.toUpperCase());
+                    break;
+            }
+
+            // Send to all players in the world
+            for (Player worldPlayer : location.getWorld().getPlayers()) {
+                worldPlayer.spawnParticle(bukkitParticle, location, amount);
+            }
+        } catch (Exception e) {
+            // Fallback to VILLAGER_HAPPY if particle not found
+            for (Player worldPlayer : location.getWorld().getPlayers()) {
+                worldPlayer.spawnParticle(org.bukkit.Particle.VILLAGER_HAPPY, location, amount);
+            }
+        }
+    }
+
+    @Override
+    public String getRawNBT(org.bukkit.inventory.ItemStack itemStack) {
+        ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound tag = nmsItem.getTag();
+        return tag == null ? "{}" : tag.toString();
+    }
+
+    @Override
+    public org.bukkit.inventory.ItemStack createItemStackWithNBT(String material, int amount, short data, String rawNBT) {
+        org.bukkit.inventory.ItemStack itemStack = createItemStack(material, amount, data);
+        if (rawNBT != null && !rawNBT.isEmpty() && !rawNBT.equals("{}")) {
+            return applyRawNBT(itemStack, rawNBT);
+        }
+        return itemStack;
+    }
+
+    @Override
+    public org.bukkit.inventory.ItemStack applyRawNBT(org.bukkit.inventory.ItemStack itemStack, String rawNBT) {
+        if (rawNBT == null || rawNBT.isEmpty() || rawNBT.equals("{}")) {
+            return itemStack;
+        }
+        
+        try {
+            ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
+            NBTTagCompound tag = nmsItem.getTag();
+            if (tag == null) {
+                tag = new NBTTagCompound();
+            }
+            
+            // Simple parsing for basic NBT format like {CustomModelData:123456}
+            if (rawNBT.startsWith("{") && rawNBT.endsWith("}")) {
+                String content = rawNBT.substring(1, rawNBT.length() - 1);
+                String[] pairs = content.split(",");
+                
+                for (String pair : pairs) {
+                    String[] keyValue = pair.split(":");
+                    if (keyValue.length == 2) {
+                        String key = keyValue[0].trim();
+                        String value = keyValue[1].trim();
+                        
+                        // Try to parse as different types
+                        if (value.matches("-?\\d+")) {
+                            // Integer
+                            tag.setInt(key, Integer.parseInt(value));
+                        } else if (value.matches("-?\\d+\\.\\d+")) {
+                            // Double
+                            tag.setDouble(key, Double.parseDouble(value));
+                        } else if (value.equals("true") || value.equals("false")) {
+                            // Boolean (represented as byte in NBT)
+                            tag.setByte(key, (byte) (Boolean.parseBoolean(value) ? 1 : 0));
+                        } else {
+                            // String (remove quotes if present)
+                            if (value.startsWith("\"") && value.endsWith("\"")) {
+                                value = value.substring(1, value.length() - 1);
+                            }
+                            tag.setString(key, value);
+                        }
+                    }
+                }
+                
+                nmsItem.setTag(tag);
+                return CraftItemStack.asBukkitCopy(nmsItem);
+            }
+        } catch (Exception e) {
+            getPlugin().getLogger().warning("Failed to parse NBT string: " + rawNBT + " - " + e.getMessage());
+        }
+        
+        return itemStack;
+    }
+
 }

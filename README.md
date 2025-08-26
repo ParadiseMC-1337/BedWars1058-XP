@@ -1,8 +1,8 @@
-# BedWars1058-XP 增强版
+# BedWars1058-XP
 
 > 基于 BedWars1058 v25.2 的增强型分支版本，新增多项实用功能
 
-[![Discord](https://discordapp.com/api/guilds/201345265821679617/widget.png?style=shield)](https://discord.gg/XdJfN2X)
+[![QQ群-Paradise](https://img.shields.io/badge/QQ群-Paradise-blue?style=flat-square&logo=tencent-qq)](https://qm.qq.com/q/5o9RKWy6aI)
 
 ## 🚀 新增功能
 
@@ -97,7 +97,7 @@ BedWars 是一个团队对战小游戏，玩家需要保护自己的床并摧毁
 
 如果您遇到问题或有功能建议，请通过以下方式联系：
 
-[![Discord Server](https://discordapp.com/api/guilds/201345265821679617/widget.png?style=banner3)](https://discord.gg/XdJfN2X)
+**ParadiseMC QQ交流群**: [点击加入群聊【ParadiseMC】](https://qm.qq.com/q/5o9RKWy6aI)
 
 ## 📄 开源协议
 

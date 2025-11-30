@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BedWars1058-XP 插件完整配置指南</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #3498db;
+        }
+
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 4px solid #3498db;
+        }
+
+        h3 {
+            color: #2980b9;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        h4 {
+            color: #8e44ad;
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+
+        code {
+            background-color: #ecf0f1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            color: #e74c3c;
+        }
+
+        .code-block {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            white-space: pre-wrap;
+        }
+
+        .note {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-left: 4px solid #fdcb6e;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .warning {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .toc {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .toc li {
+            margin: 5px 0;
+        }
+
+        .toc a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        .feature-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .config-item {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        .config-item h4 {
+            color: #495057;
+            margin-bottom: 8px;
+        }
+
+        .command-box {
+            background-color: #343a40;
+            color: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            white-space: pre-wrap;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            th,
+            td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🎮 BedWars1058-XP 插件完整配置指南</h1>
+
+        <div class="info">
+            <strong>📖 指南说明：</strong> 本指南专为 Minecraft 开服新手设计，详细解释每个配置文件和指令的作用。即使您没有服务器管理经验，也能轻松理解和配置这个强大的起床战争插件。
+        </div>
+
+        <div class="toc">
+            <h3>📑 目录导航</h3>
+            <ul>
+                <li><a href="#terminology">🔤 专业术语解释</a></li>
+                <li><a href="#server-modes">🖥️ 服务器运行模式</a></li>
+                <li><a href="#config-files">📁 配置文件详解</a></li>
+                <li><a href="#special-features">✨ 新增特色功能</a></li>
+                <li><a href="#xp-system">⭐ 经验系统详解</a></li>
+                <li><a href="#commands">⌨️ 指令大全</a></li>
+                <li><a href="#setup-guide">🛠️ 竞技场设置指南</a></li>
+                <li><a href="#troubleshooting">🔧 常见问题解决</a></li>
+            </ul>
+        </div>
+
+        <h2 id="terminology">🔤 专业术语解释</h2>
+
+        <div class="config-item">
+            <h4>🕐 游戏刻（Game Tick）</h4>
+            <p><strong>定义：</strong> Minecraft 服务器的基本时间单位，每秒运行 20 个游戏刻。</p>
+            <p><strong>换算：</strong> 1 游戏刻 = 0.05 秒，20 游戏刻 = 1 秒</p>
+            <p><strong>示例：</strong> 如果某个延迟设置为 100，表示延迟 5 秒（100÷20=5）</p>
+        </div>
+
+        <div class="config-item">
+            <h4>📦 材质名称（Material）</h4>
+            <p><strong>定义：</strong> Minecraft 中每个物品和方块的唯一标识符。</p>
+            <p><strong>示例：</strong> <code>DIAMOND_SWORD</code>（钻石剑）、<code>IRON_INGOT</code>（铁锭）</p>
+            <p><strong>注意：</strong> 不同版本的材质名称可能不同，插件会自动适配。</p>
+        </div>
+
+        <div class="config-item">
+            <h4>🎯 坐标系统</h4>
+            <p><strong>X 轴：</strong> 东西方向（正数向东，负数向西）</p>
+            <p><strong>Y 轴：</strong> 上下方向（正数向上，负数向下）</p>
+            <p><strong>Z 轴：</strong> 南北方向（正数向南，负数向北）</p>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ 重要提醒：</strong> 所有时间相关的配置（如资源刷新速度、火焰弹延迟等）都必须使用整数，因为它们以游戏刻为单位。浮点数会被强制转换为整数！
+        </div>
+
+        <h2 id="server-modes">🖥️ 服务器运行模式</h2>
+
+        <table>
+            <tr>
+                <th>模式名称</th>
+                <th>适用场景</th>
+                <th>特点</th>
+                <th>推荐程度</th>
+            </tr>
+            <tr>
+                <td><code>MULTIARENA</code></td>
+                <td>独立起床战争服务器</td>
+                <td>支持多个地图同时运行，有大厅世界</td>
+                <td>⭐⭐⭐⭐⭐</td>
+            </tr>
+            <tr>
+                <td><code>SHARED</code></td>
+                <td>综合游戏服务器</td>
+                <td>与其他游戏共存，通过指令加入</td>
+                <td>⭐⭐⭐⭐</td>
+            </tr>
+            <tr>
+                <td><code>BUNGEE</code></td>
+                <td>大型服务器网络</td>
+                <td>支持动态创建竞技场，可扩展</td>
+                <td>⭐⭐⭐</td>
+            </tr>
+            <tr>
+                <td><code>BUNGEE_LEGACY</code></td>
+                <td>简单群组服务器</td>
+                <td>一个服务器一个游戏</td>
+                <td>⭐⭐</td>
+            </tr>
+        </table>
+
+        <h2 id="config-files">📁 配置文件详解</h2>
+
+        <h3>1. 📋 config.yml（主配置文件）</h3>
+
+        <div class="config-item">
+            <h4>🌐 基础设置</h4>
+            <div class="code-block">serverType: MULTIARENA # 服务器运行模式
+                language: zh # 默认语言（zh=中文，en=英文）
+                lobby-world: world # 大厅世界名称</div>
+            <p><strong>说明：</strong> 这些是插件的核心设置，决定了服务器的运行方式和默认语言。</p>
+        </div>
+
+        <div class="config-item">
+            <h4>🎮 游戏设置</h4>
+            <div class="code-block">bungee:
+                auto-scale: false # 是否自动扩展服务器
+                server-id: bw01 # 服务器标识符
+
+                performance:
+                enable-gen-split: true # 启用生成器分离优化
+                new-sidebar: true # 使用新版侧边栏</div>
+        </div>
+
+        <h3>2. 🏟️ ArenaConfig.yml（竞技场配置）</h3>
+
+        <div class="config-item">
+            <h4>👥 玩家设置</h4>
+            <div class="code-block">minPlayers: 2 # 最少玩家数
+                maxInTeam: 1 # 每队最大人数
+                allowSpectate: true # 允许观战</div>
+        </div>
+
+        <div class="config-item">
+            <h4>🛡️ 保护区域设置</h4>
+            <div class="code-block">spawnProtection: 5 # 出生点保护半径（方块）
+                shopProtection: 1 # 商店保护半径
+                upgradesProtection: 1 # 升级站保护半径
+                generatorProtection: 1 # 生成器保护半径
+                islandRadius: 17 # 岛屿半径</div>
+            <p><strong>解释：</strong> 保护区域内玩家无法破坏方块，数值越大保护范围越大。</p>
+        </div>
+
+        <div class="config-item">
+            <h4>🌍 世界设置</h4>
+            <div class="code-block">worldBorder: 300 # 世界边界大小
+                yLevelKill: -1 # 虚空死亡高度（-1表示禁用）
+                maxBuildHeight: 180 # 最大建造高度</div>
+        </div>
+
+        <h3>3. ⚡ GeneratorsConfig.yml（生成器配置）</h3>
+
+        <div class="feature-box">
+            <h4>💎 资源生成器详解</h4>
+            <p>生成器是起床战争的核心机制，负责生产铁锭、金锭、钻石和绿宝石等资源。</p>
+        </div>
+
+        <div class="config-item">
+            <h4>🔩 铁锭生成器</h4>
+            <div class="code-block">Default:
+                iron-delay: 2 # 生成延迟：2游戏刻 = 0.1秒
+                iron-amount: 2 # 每次生成数量：2个铁锭
+                iron-spawn-limit: 32 # 最大堆叠数量：32个</div>
+            <p><strong>计算：</strong> 每 0.1 秒生成 2 个铁锭，最多堆叠 32 个。</p>
+        </div>
+
+        <div class="config-item">
+            <h4>🏆 金锭生成器</h4>
+            <div class="code-block">gold-delay: 6 # 生成延迟：6游戏刻 = 0.3秒
+                gold-amount: 2 # 每次生成数量：2个金锭
+                gold-spawn-limit: 7 # 最大堆叠数量：7个</div>
+        </div>
+
+        <div class="config-item">
+            <h4>💎 钻石生成器（三级升级）</h4>
+            <div class="code-block"># 一级钻石生成器
+                diamond-tier-I-delay: 30 # 30游戏刻 = 1.5秒
+                diamond-tier-I-amount: 1 # 每次1个钻石
+                diamond-tier-I-spawn-limit: 4
+
+                # 二级钻石生成器（游戏开始6分钟后激活）
+                diamond-tier-II-delay: 20 # 20游戏刻 = 1秒
+                diamond-tier-II-start: 360 # 360游戏刻 = 18秒后开始
+
+                # 三级钻石生成器（游戏开始18分钟后激活）
+                diamond-tier-III-delay: 15 # 15游戏刻 = 0.75秒
+                diamond-tier-III-start: 1080</div>
+            <p><strong>说明：</strong> 钻石生成器会随着游戏进程自动升级，生成速度越来越快。</p>
+        </div>
+
+        <h3 id="special-features">4. ✨ SpecialItemsConfig.yml（特色功能配置）</h3>
+
+        <div class="success">
+            <strong>🎉 BedWars1058-XP 独有功能：</strong> 以下四个特色功能是本增强版独有的，为游戏增添了更多策略性和趣味性！
+        </div>
+
+        <h4>📜 回城卷轴（WarpPowder）</h4>
+        <div class="config-item">
+            <div class="code-block">warp-powder:
+                teleport-time: 3 # 传送延迟：3秒
+                delay: 15 # 使用冷却：15秒</div>
+            <p><strong>功能：</strong> 允许玩家快速传送回基地，传送过程中会显示粒子效果。</p>
+            <p><strong>注意：</strong> 传送过程中受到伤害会被打断，物品会返还给玩家。</p>
+        </div>
+
+        <h4>🛡️ 自救平台（RescuePlatform）</h4>
+        <div class="config-item">
+            <div class="code-block">rescue-platform:
+                delay: 15 # 使用冷却：15秒
+                break-time: 150 # 平台持续时间：150游戏刻 = 7.5秒
+                material: SLIME_BLOCK # 平台材质：粘液块</div>
+            <p><strong>功能：</strong> 在玩家脚下生成临时平台，防止掉入虚空。</p>
+            <p><strong>图案：</strong> 生成十字形平台，自动检测是否可放置。</p>
+        </div>
+
+        <h4>🏰 防守墙（ProtectionWall）</h4>
+        <div class="config-item">
+            <div class="code-block">protection-wall:
+                delay: 150 # 使用冷却：150游戏刻 = 7.5秒
+                width: 5 # 墙体宽度：5格
+                height: 3 # 墙体高度：3格
+                distance: 2 # 距离玩家：2格
+                material: CUT_SANDSTONE # 墙体材质：切制砂岩</div>
+            <p><strong>功能：</strong> 在玩家面前生成防御墙体，可阻挡敌人攻击。</p>
+            <p><strong>智能：</strong> 根据玩家朝向自动调整墙体方向。</p>
+        </div>
+
+        <h4>⭐ 经验起床系统（XP System）</h4>
+        <div class="config-item">
+            <div class="code-block">xp-config:
+                iron-value: 1 # 铁锭经验值：1点
+                gold-value: 2 # 金锭经验值：2点
+                diamond-value: 5 # 钻石经验值：5点
+                emerald-value: 10 # 绿宝石经验值：10点
+                exp-bottle-value: 0 # 经验瓶经验值：0点（不转换）</div>
+            <p><strong>功能：</strong> 拾取资源时获得经验值而非物品，为游戏增加新的策略维度。</p>
+            <p><strong>启用：</strong> 在竞技场配置中设置 <code>enableXP: true</code> 来启用此功能。</p>
+
+            <div class="warning">
+                <strong>⚠️ 重要规则：</strong> 如果某个资源的经验值设置为 <code>0</code>，该资源将<strong>不会被转换为经验</strong>，玩家拾取时仍然获得原始物品。
+            </div>
+
+            <p><strong>转换示例：</strong></p>
+            <div class="code-block"># 示例配置
+                xp-config:
+                iron-value: 2 # 铁锭转换为2点经验
+                gold-value: 5 # 金锭转换为5点经验
+                diamond-value: 0 # 钻石不转换，保持原物品
+                emerald-value: 15 # 绿宝石转换为15点经验</div>
+            <p>在上述配置中，玩家拾取钻石时会直接获得钻石物品而不是经验值，其他资源则按设定比例转换为经验。</p>
+        </div>
+
+        <h3>5. 🛒 ShopConfig.yml（商店配置）</h3>
+
+        <div class="config-item">
+            <h4>🏪 商店物品设置</h4>
+            <div class="code-block">shop-items:
+                iron-sword:
+                material: IRON_SWORD
+                price: 10 # 价格：10个铁锭
+                currency: IRON_INGOT # 货币类型
+
+                diamond-armor:
+                material: DIAMOND_CHESTPLATE
+                price: 6 # 价格：6个钻石
+                currency: DIAMOND</div>
+        </div>
+
+        <div class="config-item">
+            <h4>🎯 特殊物品启用设置</h4>
+            <div class="code-block">special-items:
+                silverfish-enable: true # 启用床虫
+                iron-golem-enable: true # 启用铁傀儡（梦卫士）
+                rescue-platform-enable: true # 启用自救平台
+                warp-powder-enable: true # 启用回城卷轴
+                protection-wall-enable: true # 启用防守墙</div>
+        </div>
+
+        <h2 id="xp-system">⭐ 经验系统详解</h2>
+
+        <div class="feature-box">
+            <h4>🎓 经验起床系统介绍</h4>
+            <p>经验起床系统是 BedWars1058-XP 的核心创新功能，将传统的资源收集转换为经验积累机制，为游戏带来全新的策略深度。</p>
+        </div>
+
+        <h3>🔧 系统工作原理</h3>
+        <div class="config-item">
+            <h4>1. 资源转换机制</h4>
+            <p>当玩家拾取资源时，系统会根据配置将资源转换为经验值：</p>
+            <ul>
+                <li><strong>转换条件：</strong> 竞技场启用经验系统 + 资源经验值 > 0</li>
+                <li><strong>转换公式：</strong> 获得经验 = 资源数量 × 单个资源经验值</li>
+                <li><strong>视觉效果：</strong> 播放经验收集音效，显示经验增加</li>
+            </ul>
+        </div>
+
+        <div class="config-item">
+            <h4>2. 转换规则详解</h4>
+            <table>
+                <tr>
+                    <th>经验值设置</th>
+                    <th>转换结果</th>
+                    <th>玩家获得</th>
+                    <th>适用场景</th>
+                </tr>
+                <tr>
+                    <td>大于 0（如：iron-value: 2）</td>
+                    <td>✅ 转换为经验</td>
+                    <td>经验值</td>
+                    <td>基础资源</td>
+                </tr>
+                <tr>
+                    <td>等于 0（如：diamond-value: 0）</td>
+                    <td>❌ 不转换</td>
+                    <td>原始物品</td>
+                    <td>珍贵资源</td>
+                </tr>
+                <tr>
+                    <td>未配置</td>
+                    <td>❌ 不转换</td>
+                    <td>原始物品</td>
+                    <td>特殊物品</td>
+                </tr>
+            </table>
+        </div>
+
+        <h3>⚙️ 配置示例与策略</h3>
+        <div class="config-item">
+            <h4>策略一：全资源转换</h4>
+            <div class="code-block"># 适合纯经验模式服务器
+                xp-config:
+                iron-value: 1 # 铁锭 → 1经验
+                gold-value: 3 # 金锭 → 3经验
+                diamond-value: 10 # 钻石 → 10经验
+                emerald-value: 25 # 绿宝石 → 25经验</div>
+            <p><strong>特点：</strong> 所有资源都转换为经验，玩家通过经验等级解锁物品。</p>
+        </div>
+
+        <div class="config-item">
+            <h4>策略二：混合模式</h4>
+            <div class="code-block"># 平衡经验与物品的混合模式
+                xp-config:
+                iron-value: 2 # 铁锭转换为经验
+                gold-value: 4 # 金锭转换为经验
+                diamond-value: 0 # 钻石保持物品
+                emerald-value: 0 # 绿宝石保持物品</div>
+            <p><strong>特点：</strong> 基础资源转经验，高级资源保持物品形态，增加策略选择。</p>
+        </div>
+
+        <div class="config-item">
+            <h4>策略三：传统模式</h4>
+            <div class="code-block"># 保持传统游戏模式
+                xp-config:
+                iron-value: 0 # 所有资源都不转换
+                gold-value: 0
+                diamond-value: 0
+                emerald-value: 0</div>
+            <p><strong>特点：</strong> 关闭经验转换，保持原版游戏体验。</p>
+        </div>
+
+        <h3>🎯 实战应用技巧</h3>
+        <div class="success">
+            <h4>💡 服务器管理员建议</h4>
+            <ul>
+                <li><strong>新手服务器：</strong> 使用混合模式，让玩家逐步适应经验系统</li>
+                <li><strong>竞技服务器：</strong> 使用全转换模式，增加游戏策略深度</li>
+                <li><strong>休闲服务器：</strong> 保持传统模式，专注于建造和战斗乐趣</li>
+                <li><strong>测试阶段：</strong> 先设置较低的经验值，观察游戏平衡性</li>
+            </ul>
+        </div>
+
+        <div class="info">
+            <strong>🔍 调试提示：</strong> 启用插件调试模式可以在控制台看到详细的经验转换日志，帮助您调试配置问题。
+        </div>
+
+        <h2 id="commands">⌨️ 指令大全</h2>
+
+        <h3>👤 玩家指令</h3>
+        <table>
+            <tr>
+                <th>指令</th>
+                <th>功能</th>
+                <th>示例</th>
+                <th>权限</th>
+            </tr>
+            <tr>
+                <td><code>/bw join [地图名]</code></td>
+                <td>加入指定地图或随机地图</td>
+                <td><code>/bw join map1</code></td>
+                <td>无</td>
+            </tr>
+            <tr>
+                <td><code>/bw leave</code></td>
+                <td>离开当前游戏</td>
+                <td><code>/bw leave</code></td>
+                <td>无</td>
+            </tr>
+            <tr>
+                <td><code>/bw stats [玩家]</code></td>
+                <td>查看统计数据</td>
+                <td><code>/bw stats Steve</code></td>
+                <td>无</td>
+            </tr>
+            <tr>
+                <td><code>/bw lang [语言]</code></td>
+                <td>切换语言</td>
+                <td><code>/bw lang zh</code></td>
+                <td>无</td>
+            </tr>
+            <tr>
+                <td><code>/bw gui</code></td>
+                <td>打开地图选择界面</td>
+                <td><code>/bw gui</code></td>
+                <td>无</td>
+            </tr>
+        </table>
+
+        <h3>👑 管理员指令</h3>
+
+        <h4>🔧 基础管理</h4>
+        <div class="command-box">/bw reload # 重载插件配置
+            /bw arenaList # 查看所有地图列表
+            /bw enableArena [地图名] # 启用指定地图
+            /bw disableArena [地图名] # 禁用指定地图
+            /bw delArena [地图名] # 删除指定地图</div>
+
+        <h4>🏗️ 地图设置（需要在地图世界中执行）</h4>
+        <div class="command-box">/bw setupArena [地图名] # 开始设置地图
+            /bw setLobby # 设置大厅出生点
+            /bw setWaitingSpawn # 设置等待大厅出生点
+            /bw createTeam [队伍名] [颜色] # 创建队伍
+            /bw setSpawn [队伍名] # 设置队伍出生点
+            /bw setBed [队伍名] # 设置队伍床位置
+            /bw setShop [队伍名] # 设置商店NPC位置
+            /bw setUpgrade [队伍名] # 设置升级站位置
+            /bw addGenerator [类型] [等级] # 添加资源生成器
+            /bw save # 保存地图配置</div>
+
+        <h4>🎮 游戏管理</h4>
+        <div class="command-box">/bw start [地图名] # 强制开始游戏
+            /bw tp [玩家] [地图名] # 传送玩家到指定地图
+            /bw cloneArena [原地图] [新地图名] # 克隆地图</div>
+
+        <h2 id="setup-guide">🛠️ 竞技场设置指南</h2>
+
+        <div class="info">
+            <strong>📝 设置流程：</strong> 按照以下步骤，您可以轻松创建一个完整的起床战争地图。
+        </div>
+
+        <h3>第一步：创建世界和基础设置</h3>
+        <div class="config-item">
+            <h4>1. 准备地图世界</h4>
+            <ul>
+                <li>创建一个新的世界（建议使用平坦世界）</li>
+                <li>建造您的起床战争地图</li>
+                <li>确保每个队伍都有独立的岛屿</li>
+            </ul>
+
+            <h4>2. 开始设置</h4>
+            <div class="command-box">/bw setupArena [地图名称]</div>
+            <p>执行后，您将进入地图设置模式。</p>
+        </div>
+
+        <h3>第二步：设置基础位置</h3>
+        <div class="config-item">
+            <h4>1. 设置等待大厅</h4>
+            <div class="command-box">/bw setWaitingSpawn</div>
+            <p>站在您希望玩家等待的位置执行此命令。</p>
+
+            <h4>2. 设置观战出生点</h4>
+            <div class="command-box">/bw setSpectSpawn</div>
+            <p>站在观战者出生的位置执行此命令。</p>
+        </div>
+
+        <h3>第三步：创建队伍</h3>
+        <div class="config-item">
+            <h4>队伍颜色列表</h4>
+            <table>
+                <tr>
+                    <th>颜色代码</th>
+                    <th>颜色名称</th>
+                    <th>推荐队伍名</th>
+                </tr>
+                <tr>
+                    <td>RED</td>
+                    <td>红色</td>
+                    <td>红队</td>
+                </tr>
+                <tr>
+                    <td>BLUE</td>
+                    <td>蓝色</td>
+                    <td>蓝队</td>
+                </tr>
+                <tr>
+                    <td>GREEN</td>
+                    <td>绿色</td>
+                    <td>绿队</td>
+                </tr>
+                <tr>
+                    <td>YELLOW</td>
+                    <td>黄色</td>
+                    <td>黄队</td>
+                </tr>
+                <tr>
+                    <td>AQUA</td>
+                    <td>青色</td>
+                    <td>青队</td>
+                </tr>
+                <tr>
+                    <td>WHITE</td>
+                    <td>白色</td>
+                    <td>白队</td>
+                </tr>
+                <tr>
+                    <td>PINK</td>
+                    <td>粉色</td>
+                    <td>粉队</td>
+                </tr>
+                <tr>
+                    <td>GRAY</td>
+                    <td>灰色</td>
+                    <td>灰队</td>
+                </tr>
+            </table>
+
+            <div class="command-box">/bw createTeam 红队 RED</div>
+            <p>为每个岛屿创建对应的队伍。</p>
+        </div>
+
+        <h3>第四步：设置队伍相关位置</h3>
+        <div class="config-item">
+            <p>对每个队伍重复以下步骤：</p>
+
+            <h4>1. 设置出生点</h4>
+            <div class="command-box">/bw setSpawn 红队</div>
+            <p>站在该队伍岛屿的出生位置执行。</p>
+
+            <h4>2. 设置床位置</h4>
+            <div class="command-box">/bw setBed 红队</div>
+            <p>右键点击该队伍的床执行。</p>
+
+            <h4>3. 设置商店位置</h4>
+            <div class="command-box">/bw setShop 红队</div>
+            <p>站在您希望商店NPC出现的位置执行。</p>
+
+            <h4>4. 设置升级站位置</h4>
+            <div class="command-box">/bw setUpgrade 红队</div>
+            <p>站在您希望升级NPC出现的位置执行。</p>
+        </div>
+
+        <h3>第五步：添加资源生成器</h3>
+        <div class="config-item">
+            <h4>生成器类型说明</h4>
+            <ul>
+                <li><strong>IRON</strong>：铁锭生成器（通常放在队伍岛屿上）</li>
+                <li><strong>GOLD</strong>：金锭生成器（通常放在队伍岛屿上）</li>
+                <li><strong>DIAMOND</strong>：钻石生成器（放在中立区域）</li>
+                <li><strong>EMERALD</strong>：绿宝石生成器（放在地图边缘）</li>
+            </ul>
+
+            <div class="command-box"># 在每个队伍岛屿添加铁锭和金锭生成器
+                /bw addGenerator IRON 1
+                /bw addGenerator GOLD 1
+
+                # 在中立区域添加钻石生成器
+                /bw addGenerator DIAMOND 1
+
+                # 在地图边缘添加绿宝石生成器
+                /bw addGenerator EMERALD 1</div>
+        </div>
+
+        <h3>第六步：完成设置</h3>
+        <div class="config-item">
+            <h4>保存地图</h4>
+            <div class="command-box">/bw save</div>
+            <p>保存所有设置并退出设置模式。</p>
+
+            <h4>启用地图</h4>
+            <div class="command-box">/bw enableArena [地图名称]</div>
+            <p>启用地图，让玩家可以加入游戏。</p>
+        </div>
+
+        <h2 id="troubleshooting">🔧 常见问题解决</h2>
+
+        <h3>❓ 配置相关问题</h3>
+
+        <div class="config-item">
+            <h4>Q: 为什么我设置的延迟时间不准确？</h4>
+            <p><strong>A:</strong> 请确保使用整数值。所有时间相关配置都以游戏刻为单位（20游戏刻=1秒）。浮点数会被强制转换为整数。</p>
+            <div class="code-block"># 正确写法
+                delay: 100 # 5秒延迟
+
+                # 错误写法
+                delay: 5.5 # 会被转换为 5，实际延迟 0.25 秒</div>
+        </div>
+
+        <div class="config-item">
+            <h4>Q: 特殊物品不显示在商店中？</h4>
+            <p><strong>A:</strong> 检查以下设置：</p>
+            <ul>
+                <li>确认在 <code>ShopConfig.yml</code> 中启用了对应物品</li>
+                <li>检查物品的材质名称是否正确</li>
+                <li>确保商店分类配置正确</li>
+            </ul>
+        </div>
+
+        <div class="config-item">
+            <h4>Q: 经验起床功能不工作？</h4>
+            <p><strong>A:</strong> 请确保：</p>
+            <ul>
+                <li>在竞技场配置中设置 <code>enableXP: true</code></li>
+                <li>检查 <code>XpConfig.yml</code> 中的经验值设置</li>
+                <li>重启服务器或重载配置</li>
+            </ul>
+        </div>
+
+        <div class="config-item">
+            <h4>Q: 经验起床功能中，为什么有些资源没有转换为经验？</h4>
+            <p><strong>A:</strong> 检查 <code>XpConfig.yml</code> 中对应资源的经验值设置：</p>
+            <ul>
+                <li><strong>经验值 > 0：</strong> 资源会按比例转换为经验值</li>
+                <li><strong>经验值 = 0：</strong> 资源不会转换，玩家获得原始物品</li>
+                <li><strong>未配置：</strong> 默认不转换，获得原始物品</li>
+            </ul>
+            <div class="code-block"># 示例：部分转换配置
+                xp-config:
+                iron-value: 2 # 铁锭转换为经验
+                gold-value: 5 # 金锭转换为经验
+                diamond-value: 0 # 钻石保持原物品
+                emerald-value: 0 # 绿宝石保持原物品</div>
+            <p>这种配置适合希望保留高级资源作为物品，而将基础资源转换为经验的服务器。</p>
+        </div>
+
+        <h3>🎮 游戏运行问题</h3>
+
+        <div class="config-item">
+            <h4>Q: 地图设置完成后无法启用？</h4>
+            <p><strong>A:</strong> 检查以下必要设置：</p>
+            <ul>
+                <li>至少创建了2个队伍</li>
+                <li>每个队伍都设置了出生点和床位置</li>
+                <li>设置了等待大厅出生点</li>
+                <li>添加了必要的资源生成器</li>
+            </ul>
+        </div>
+
+        <div class="config-item">
+            <h4>Q: 玩家无法加入游戏？</h4>
+            <p><strong>A:</strong> 可能的原因：</p>
+            <ul>
+                <li>地图未启用：使用 <code>/bw enableArena [地图名]</code></li>
+                <li>权限不足：检查玩家是否有加入权限</li>
+                <li>服务器模式配置错误：检查 <code>serverType</code> 设置</li>
+            </ul>
+        </div>
+
+        <h3>🔄 性能优化建议</h3>
+
+        <div class="success">
+            <h4>💡 优化提示</h4>
+            <ul>
+                <li><strong>使用Paper服务端：</strong> 比Spigot性能更好，功能更完整</li>
+                <li><strong>安装世界管理插件：</strong> 如SlimeWorldManager，提升地图重置速度</li>
+                <li><strong>合理设置生成器：</strong> 避免过多的资源生成器影响性能</li>
+                <li><strong>定期清理：</strong> 使用 <code>/bw reload</code> 重载配置释放内存</li>
+            </ul>
+        </div>
+
+        <div class="note">
+            <strong>📞 需要帮助？</strong> 如果您在配置过程中遇到问题，可以加入QQ群：<a href="https://qm.qq.com/q/5o9RKWy6aI">ParadiseMC</a> 寻求帮助。
+        </div>
+
+        <hr style="margin: 30px 0; border: none; border-top: 2px solid #3498db;">
+
+        <div style="text-align: center; color: #7f8c8d; margin-top: 20px;">
+            <p>🎮 <strong>BedWars1058-XP</strong> - 让起床战争更精彩！</p>
+            <p>基于 BedWars1058 v25.2 的增强版本 | 新增四大特色功能</p>
+        </div>
+    </div>
+</body>
+
+</html>

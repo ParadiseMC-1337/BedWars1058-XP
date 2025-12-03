@@ -909,6 +909,7 @@ public class Arena implements IArena {
             this.sendToMainLobby(p);
         }
 
+        p.setExp(0);
         /* restore player inventory */
         PlayerGoods pg = PlayerGoods.getPlayerGoods(p);
         if (pg == null) {

@@ -51,15 +51,11 @@
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-base</artifactId>
             <version>25.2.2-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../libs/sidebar-base-25.2.2-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.andrei1058.spigot.sidebar</groupId>
             <artifactId>sidebar-cmn1</artifactId>
             <version>25.2.2-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../libs/sidebar-cmn1-25.2.2-SNAPSHOT.jar</systemPath>
         </dependency>
     </dependencies>
     <build>

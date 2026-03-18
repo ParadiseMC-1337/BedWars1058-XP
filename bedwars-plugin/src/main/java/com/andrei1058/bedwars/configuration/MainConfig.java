@@ -167,6 +167,10 @@ public class MainConfig extends ConfigManager {
         saveSpectatorCommandItem("teleporter", "bw teleporter", false, getForCurrentVersion("SKULL_ITEM", "SKULL_ITEM", "PLAYER_HEAD"), 3, 0);
         saveSpectatorCommandItem("leave", "bw leave", false, getForCurrentVersion("BED", "BED", "RED_BED"), 0, 8);
 
+        /* Victory Command Items */
+        saveVictoryCommandItem("stats", "bw stats", false, getForCurrentVersion("SKULL_ITEM", "SKULL_ITEM", "PLAYER_HEAD"), 3, 0);
+        saveVictoryCommandItem("leave", "bw leave", false, getForCurrentVersion("BED", "BED", "RED_BED"), 0, 8);
+
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SIZE, 27);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_SHOW_PLAYING, true);
         yml.addDefault(ConfigPath.GENERAL_CONFIGURATION_ARENA_SELECTOR_SETTINGS_USE_SLOTS, "10,11,12,13,14,15,16");
@@ -455,6 +459,19 @@ public class MainConfig extends ConfigManager {
             getYml().addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_DATA.replace("%path%", name), data);
             getYml().addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_ENCHANTED.replace("%path%", name), enchanted);
             getYml().addDefault(ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_SLOT.replace("%path%", name), slot);
+            getYml().options().copyDefaults(true);
+            save();
+        }
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public void saveVictoryCommandItem(String name, String cmd, boolean enchanted, String material, int data, int slot) {
+        if (isFirstTime()) {
+            getYml().addDefault(ConfigPath.GENERAL_CONFIGURATION_VICTORY_ITEMS_COMMAND.replace("%path%", name), cmd);
+            getYml().addDefault(ConfigPath.GENERAL_CONFIGURATION_VICTORY_ITEMS_MATERIAL.replace("%path%", name), material);
+            getYml().addDefault(ConfigPath.GENERAL_CONFIGURATION_VICTORY_ITEMS_DATA.replace("%path%", name), data);
+            getYml().addDefault(ConfigPath.GENERAL_CONFIGURATION_VICTORY_ITEMS_ENCHANTED.replace("%path%", name), enchanted);
+            getYml().addDefault(ConfigPath.GENERAL_CONFIGURATION_VICTORY_ITEMS_SLOT.replace("%path%", name), slot);
             getYml().options().copyDefaults(true);
             save();
         }

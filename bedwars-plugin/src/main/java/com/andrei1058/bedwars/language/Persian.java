@@ -312,6 +312,12 @@ public class Persian extends Language {
         yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "leave"), "&eBazgasht be Lobby");
         yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fBaraye raftan az arena Right-click konid!"));
 
+        /* Victory Command Items */
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_VICTORY_ITEMS_NAME.replace("%path%", "stats"), "&eAmar");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_VICTORY_ITEMS_LORE.replace("%path%", "stats"), Collections.singletonList("&fBaraye didan amaretoon Right-click konid!"));
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_VICTORY_ITEMS_NAME.replace("%path%", "leave"), "&eBazgasht be Lobby");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_VICTORY_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fBaraye raftan az arena Right-click konid!"));
+
         /* save default items messages for stats gui */
         yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&8{player} Amar");
         addDefaultStatsMsg(yml, "wins", "&6Bord", "&f{wins}");

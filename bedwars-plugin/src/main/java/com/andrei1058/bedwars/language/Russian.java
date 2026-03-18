@@ -1047,6 +1047,12 @@ public class Russian extends Language{
         yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "leave"), "&eВернутья в лобби");
         yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fЩелкните правой кнопкой мыши, чтобы вернуться в лобби!"));
 
+        /* Victory Command Items */
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_VICTORY_ITEMS_NAME.replace("%path%", "stats"), "&eСтатистика");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_VICTORY_ITEMS_LORE.replace("%path%", "stats"), Collections.singletonList("&fПКМ, чтобы увидеть свою статистику!"));
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_VICTORY_ITEMS_NAME.replace("%path%", "leave"), "&eВернутья в лобби");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_VICTORY_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fЩелкните правой кнопкой мыши, чтобы вернуться в лобби!"));
+
         yml.addDefault(Messages.COMMAND_COOLDOWN, "&cВы не можете сделать этого! Подождите еще {seconds} секунд!");
         yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_TEAM, "{TeamColor}[{TeamName}]");
         yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_SHOUT, "&6[ВСЕМ]");

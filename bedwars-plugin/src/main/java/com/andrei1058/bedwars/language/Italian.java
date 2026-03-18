@@ -296,6 +296,12 @@ public class Italian extends Language {
         yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "leave"), "&eTorna nella Lobby");
         yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fClick-destro per lasciare BedWars!"));
 
+        /* Victory Command Items */
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_VICTORY_ITEMS_NAME.replace("%path%", "stats"), "&eStatistiche");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_VICTORY_ITEMS_LORE.replace("%path%", "stats"), Arrays.asList("&fClick-destro per vedere", "le tue statistiche!"));
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_VICTORY_ITEMS_NAME.replace("%path%", "leave"), "&eTorna nella Lobby");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_VICTORY_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fClick-destro per lasciare BedWars!"));
+
         yml.addDefault(Messages.REJOIN_NO_ARENA, "{prefix}&cNon c'è un'arena su cui ritornare!");
         yml.addDefault(Messages.REJOIN_DENIED, "{prefix}&cNon puoi tornare più. Partita finita o letto distrutto.");
         yml.addDefault(Messages.REJOIN_ALLOWED, "{prefix}&eStai entrando sull'arena &a{arena}&e!");

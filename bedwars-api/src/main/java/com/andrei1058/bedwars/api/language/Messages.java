@@ -472,6 +472,10 @@ public class Messages {
     public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME = ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH + "-%path%-name";
     public static final String GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE = ConfigPath.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_PATH + "-%path%-lore";
 
+    /* Victory Items Messages */
+    public static final String GENERAL_CONFIGURATION_VICTORY_ITEMS_NAME = ConfigPath.GENERAL_CONFIGURATION_VICTORY_ITEMS_PATH + "-%path%-name";
+    public static final String GENERAL_CONFIGURATION_VICTORY_ITEMS_LORE = ConfigPath.GENERAL_CONFIGURATION_VICTORY_ITEMS_PATH + "-%path%-lore";
+
     /* Arena waiting Items Messages */
     public static final String GENERAL_CONFIGURATION_WAITING_ITEMS_NAME = ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH + "-%path%-name";
     public static final String GENERAL_CONFIGURATION_WAITING_ITEMS_LORE = ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH + "-%path%-lore";

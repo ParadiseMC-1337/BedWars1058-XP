@@ -296,6 +296,12 @@ public class Romanian extends Language {
         yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "leave"), "&eInapoi in Lobby");
         yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "leave"), Arrays.asList("&fClick-dreapta pentru a", "&fparasi arena!"));
 
+        /* Victory Command ITEMS */
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_VICTORY_ITEMS_NAME.replace("%path%", "stats"), "&eStatistici");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_VICTORY_ITEMS_LORE.replace("%path%", "stats"), Arrays.asList("&fClick-dreapta pentru", "&fa-ti vedea statisticile!"));
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_VICTORY_ITEMS_NAME.replace("%path%", "leave"), "&eInapoi in Hub");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_VICTORY_ITEMS_LORE.replace("%path%", "leave"), Arrays.asList("&fClick-dreapta pentru a", "&fparasi BedWars!"));
+
         yml.addDefault(Messages.REJOIN_NO_ARENA, "{prefix}&cNu ai o arena pe care sa te reintorci!");
         yml.addDefault(Messages.REJOIN_DENIED, "{prefix}&cNu mai poti face asta. Jocul s-a terminat sau patul a fost distrus.");
         yml.addDefault(Messages.REJOIN_ALLOWED, "{prefix}&eIntri pe arena &a{arena}&e!");

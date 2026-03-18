@@ -310,6 +310,12 @@ public class Portuguese extends Language {
         yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_NAME.replace("%path%", "leave"), "&eSair da Partida");
         yml.addDefault(Messages.GENERAL_CONFIGURATION_SPECTATOR_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fBotão direito para sair da arena!"));
 
+        /* Victory Command Items */
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_VICTORY_ITEMS_NAME.replace("%path%", "stats"), "&eEstatísticas");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_VICTORY_ITEMS_LORE.replace("%path%", "stats"), Collections.singletonList("&fBotão direito para ver estatísticas!"));
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_VICTORY_ITEMS_NAME.replace("%path%", "leave"), "&eSair da Partida");
+        yml.addDefault(Messages.GENERAL_CONFIGURATION_VICTORY_ITEMS_LORE.replace("%path%", "leave"), Collections.singletonList("&fBotão direito para sair da arena!"));
+
         /* save default items messages for stats gui */
         yml.addDefault(Messages.PLAYER_STATS_GUI_INV_NAME, "&8Estatísticas de {player}");
         addDefaultStatsMsg(yml, "wins", "&6Vitórias", "&f{wins}");

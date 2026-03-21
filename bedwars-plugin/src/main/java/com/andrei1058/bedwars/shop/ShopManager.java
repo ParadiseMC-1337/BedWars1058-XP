@@ -94,10 +94,21 @@ public class ShopManager extends ConfigManager {
 
         getYml().addDefault(ConfigPath.SHOP_SPECIAL_RESCUE_PLATFORM_ENABLE, true);
         getYml().addDefault(ConfigPath.SHOP_SPECIAL_RESCUE_PLATFORM_MATERIAL, "BLAZE_ROD");
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_RESCUE_PLATFORM_BLOCK_MATERIAL, "SLIME_BLOCK");
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_RESCUE_PLATFORM_COOLDOWN, 15);
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_RESCUE_PLATFORM_BREAK_TIME, 150);
         getYml().addDefault(ConfigPath.SHOP_SPECIAL_WARP_POWDER_ENABLE, true);
-        getYml().addDefault(ConfigPath.SHOP_SPECIAL_WARP_POWDER_MATERIAL, "GUNPOWDER");
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_WARP_POWDER_MATERIAL, BedWars.getForCurrentVersion("SULPHUR", "SULPHUR", "GUNPOWDER"));
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_WARP_POWDER_USE_MATERIAL, "GLOWSTONE_DUST");
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_WARP_POWDER_COOLDOWN, 15);
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_WARP_POWDER_TELEPORT_TIME, 3);
         getYml().addDefault(ConfigPath.SHOP_SPECIAL_PROTECTION_WALL_ENABLE, true);
-        getYml().addDefault(ConfigPath.SHOP_SPECIAL_PROTECTION_WALL_MATERIAL, "CUT_SANDSTONE");
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_PROTECTION_WALL_MATERIAL, BedWars.getForCurrentVersion("SANDSTONE", "SANDSTONE", "CUT_SANDSTONE"));
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_PROTECTION_WALL_BLOCK_MATERIAL, BedWars.getForCurrentVersion("SANDSTONE", "SANDSTONE", "CUT_SANDSTONE"));
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_PROTECTION_WALL_COOLDOWN, 15);
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_PROTECTION_WALL_WIDTH, 5);
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_PROTECTION_WALL_HEIGHT, 3);
+        getYml().addDefault(ConfigPath.SHOP_SPECIAL_PROTECTION_WALL_DISTANCE, 2);
 
         if (isFirstTime()) {
             //quick buy defaults
@@ -364,13 +375,13 @@ public class ShopManager extends ConfigManager {
                     0, 1, "", "", "", false);
 
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "warp-powder", 33, "tier1",
-                    "GUNPOWDER", 0, 1, false, 5, "emerald", false, false);
-            addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "warp-powder", "tier1", "warp-powder", "GUNPOWDER",
+                    BedWars.getForCurrentVersion("SULPHUR", "SULPHUR", "GUNPOWDER"), 0, 1, false, 5, "emerald", false, false);
+            addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "warp-powder", "tier1", "warp-powder", BedWars.getForCurrentVersion("SULPHUR", "SULPHUR", "GUNPOWDER"),
                     0, 1, "", "", "", false);
 
             adCategoryContentTier(ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "protection-wall", 34, "tier1",
-                    "CUT_SANDSTONE", 0, 1, false, 12, "gold", false, false);
-            addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "protection-wall", "tier1", "protection-wall", "CUT_SANDSTONE",
+                    BedWars.getForCurrentVersion("SANDSTONE", "SANDSTONE", "CUT_SANDSTONE"), 0, 1, false, 12, "gold", false, false);
+            addBuyItem(ConfigPath.SHOP_PATH_CATEGORY_UTILITY, "protection-wall", "tier1", "protection-wall", BedWars.getForCurrentVersion("SANDSTONE", "SANDSTONE", "CUT_SANDSTONE"),
                     0, 1, "", "", "", false);
         }
 

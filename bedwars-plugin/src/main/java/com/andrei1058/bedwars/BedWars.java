@@ -116,7 +116,6 @@ public class BedWars extends JavaPlugin {
     public static BedWars plugin;
     public static VersionSupport nms;
     public static XpConfig xpConfig;
-    public static SpecialItemsConfig specialItemsConfig;
 
     public static boolean isPaper = false;
 
@@ -188,23 +187,10 @@ public class BedWars extends JavaPlugin {
         this.getLogger().info("Loading support for paper/spigot: " + version);
 
         // Setup languages
-        new English();
-        new Romanian();
-        new Italian();
-        new Polish();
-        new Spanish();
-        new Russian();
-        new Bangla();
-        new Persian();
-        new Hindi();
-        new Indonesia();
-        new Portuguese();
         new SimplifiedChinese();
-        new Turkish();
 
         config = new MainConfig(this, "config");
         xpConfig = new XpConfig(this, "xp", this.getDataFolder().getPath());
-        specialItemsConfig = new SpecialItemsConfig(this, "special-items", this.getDataFolder().getPath());
 
         generators = new GeneratorsConfig(this, "generators", this.getDataFolder().getPath());
         // Initialize signs config after the main config
@@ -354,10 +340,7 @@ public class BedWars extends JavaPlugin {
         Bukkit.getScheduler().runTaskTimer(this, new Refresh(), 20L, 20L);
         //new Refresh().runTaskTimer(this, 20L, 20L);
 
-        if (config.getBoolean(ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN)) {
-            //new OneTick().runTaskTimer(this, 120, 1);
-            Bukkit.getScheduler().runTaskTimer(this, new OneTick(), 120, 1);
-        }
+        Bukkit.getScheduler().runTaskTimer(this, new OneTick(), 120, 1);
 
         /* Register NMS entities */
         nms.registerEntities();

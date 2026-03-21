@@ -23,15 +23,14 @@ package com.andrei1058.bedwars.listeners;
 import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.IArena;
 import com.andrei1058.bedwars.api.arena.team.ITeam;
-import com.andrei1058.bedwars.api.configuration.ConfigManager;
 import com.andrei1058.bedwars.api.configuration.ConfigPath;
 import com.andrei1058.bedwars.api.language.Messages;
 import com.andrei1058.bedwars.api.server.ServerType;
 import com.andrei1058.bedwars.arena.Arena;
 import com.andrei1058.bedwars.configuration.Sounds;
-import com.andrei1058.bedwars.configuration.SpecialItemsConfig;
 import com.andrei1058.bedwars.shop.ShopCache;
 import com.andrei1058.bedwars.shop.listeners.InventoryListener;
+import com.andrei1058.bedwars.special.ProtectionWall;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -56,35 +55,37 @@ import org.bukkit.util.Vector;
 
 import static com.andrei1058.bedwars.BedWars.*;
 import static com.andrei1058.bedwars.api.language.Language.getMsg;
-import static com.andrei1058.bedwars.special.RescuePlatform.canCreatePlatform;
 import static com.andrei1058.bedwars.special.ProtectionWall.canCreateWall;
+import static com.andrei1058.bedwars.special.RescuePlatform.canCreatePlatform;
 
 public class Interact implements Listener {
 
     private final double fireballSpeedMultiplier;
     private final double fireballCooldown;
-    private final float fireballExplosionSize;
-    private final double rescuePlatformCooldown;
-    private final double rescuePlatformBreakTime;
-    private final double warpPowderCooldown;
-    private final double warpPowderTPDelay;
-    private final double protectionWallCooldown;
-    private final int protectionWallWidth;
-    private final int protectionWallHeight;
-    private final int protectionWallDistance;
+    private final float fireballExplosionYield;
 
     public Interact() {
         this.fireballSpeedMultiplier = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_SPEED_MULTIPLIER);
         this.fireballCooldown = config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_COOLDOWN);
-        this.fireballExplosionSize = (float) config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_EXPLOSION_SIZE);
-        this.rescuePlatformCooldown = specialItemsConfig.getDouble(ConfigPath.SPECIAL_ITEMS_RESCUE_PLATFORM_DELAY);
-        this.rescuePlatformBreakTime = specialItemsConfig.getDouble(ConfigPath.SPECIAL_ITEMS_RESCUE_PLATFORM_BREAK_TIME);
-        this.warpPowderCooldown = specialItemsConfig.getDouble(ConfigPath.SPECIAL_ITEMS_WARP_POWDER_DELAY);
-        this.warpPowderTPDelay = specialItemsConfig.getDouble(ConfigPath.SPECIAL_ITEMS_WARP_POWDER_TELEPORT_TIME);
-        this.protectionWallCooldown = specialItemsConfig.getDouble(ConfigPath.SPECIAL_ITEMS_PROTECTION_WALL_DELAY);
-        this.protectionWallWidth = specialItemsConfig.getInt(ConfigPath.SPECIAL_ITEMS_PROTECTION_WALL_WIDTH);
-        this.protectionWallHeight = specialItemsConfig.getInt(ConfigPath.SPECIAL_ITEMS_PROTECTION_WALL_HEIGHT);
-        this.protectionWallDistance = specialItemsConfig.getInt(ConfigPath.SPECIAL_ITEMS_PROTECTION_WALL_DISTANCE);
+        this.fireballExplosionYield = (float) config.getYml().getDouble(ConfigPath.GENERAL_FIREBALL_EXPLOSION_YIELD);
+    }
+
+    private static double getShopDouble(String path) {
+        return BedWars.shop.getYml().getDouble(path);
+    }
+
+    private static int getShopInt(String path) {
+        return BedWars.shop.getInt(path);
+    }
+
+    private static long getRemainingCooldownMillis(long lastUse, double cooldownSeconds) {
+        long remaining = (long) (cooldownSeconds * 1000) - (System.currentTimeMillis() - lastUse);
+        return Math.max(0L, remaining);
+    }
+
+    private static String formatCooldown(Player player, String path, long remainingMillis) {
+        long remainingSeconds = (long) Math.ceil(remainingMillis / 1000.0D);
+        return getMsg(player, path).replace("{s}", String.valueOf(remainingSeconds));
     }
 
     @EventHandler
@@ -132,6 +133,7 @@ public class Interact implements Listener {
     public void onInteract(PlayerInteractEvent e) {
         if (e == null) return;
         Player p = e.getPlayer();
+        if (BedWars.shop == null) return;
         Arena.afkCheck.remove(p.getUniqueId());
         if (BedWars.getAPI().getAFKUtil().isPlayerAFK(e.getPlayer())) {
             BedWars.getAPI().getAFKUtil().setPlayerAFK(e.getPlayer(), false);
@@ -229,78 +231,95 @@ public class Interact implements Listener {
                             fb = nms.setFireballDirection(fb, direction);
                             fb.setVelocity(fb.getDirection().multiply(fireballSpeedMultiplier));
                             //fb.setIsIncendiary(false); // apparently this on <12 makes the fireball not explode on hit. wtf bukkit?
-                            fb.setYield(fireballExplosionSize);
+                            fb.setYield(fireballExplosionYield);
                             fb.setMetadata("bw1058", new FixedMetadataValue(plugin, "ceva"));
                             nms.minusAmount(p, inHand, 1);
                         }
 
                     }
-                    if (inHand.getType() == Material.valueOf(shop.getString(ConfigPath.SHOP_SPECIAL_RESCUE_PLATFORM_MATERIAL)) && shop.getBoolean(ConfigPath.SHOP_SPECIAL_RESCUE_PLATFORM_ENABLE)) {
+                    if (inHand.getType() == Material.valueOf(shop.getString(ConfigPath.SHOP_SPECIAL_RESCUE_PLATFORM_MATERIAL))
+                            && shop.getBoolean(ConfigPath.SHOP_SPECIAL_RESCUE_PLATFORM_ENABLE)) {
 
                         e.setCancelled(true);
 
-                        if (System.currentTimeMillis() - a.getRescuePlatformCooldowns().getOrDefault(p.getUniqueId(), 0L) > (rescuePlatformCooldown * 1000)) {
-
-                            if (canCreatePlatform(p)) {
-                                a.getRescuePlatformCooldowns().put(p.getUniqueId(), System.currentTimeMillis());
-                                e.setCancelled(true);
-                                if (inHand.getAmount() > 1) {
-                                    inHand.setAmount(inHand.getAmount() - 1);
-                                } else {
-                                    p.getInventory().remove(inHand);
-                                }
-                                new com.andrei1058.bedwars.special.RescuePlatform(p, rescuePlatformBreakTime);
-                            } else {
-                                p.sendMessage(getMsg(p, Messages.SPECIAL_ITEMS_RESCUE_PLATFORM_CREATE_FAILED));
-                            }
+                        double rescuePlatformCooldown = getShopDouble(ConfigPath.SHOP_SPECIAL_RESCUE_PLATFORM_COOLDOWN);
+                        long remainingCooldown = getRemainingCooldownMillis(a.getRescuePlatformCooldowns().getOrDefault(p.getUniqueId(), 0L), rescuePlatformCooldown);
+                        if (remainingCooldown > 0L) {
+                            p.sendMessage(formatCooldown(p, Messages.SPECIAL_ITEMS_RESCUE_PLATFORM_COOLDOWN, remainingCooldown));
+                            return;
                         }
 
-                    }
-                    if (inHand.getType() == Material.valueOf(shop.getString(ConfigPath.SHOP_SPECIAL_WARP_POWDER_MATERIAL)) && shop.getBoolean(ConfigPath.SHOP_SPECIAL_WARP_POWDER_ENABLE)) {
-
-                        e.setCancelled(true);
-
-                        if (System.currentTimeMillis() - a.getWarpPowderCooldowns().getOrDefault(p.getUniqueId(), 0L) > (warpPowderCooldown * 1000)) {
-
-                            if (com.andrei1058.bedwars.special.WarpPowder.isWarping(p)) {
-                                return;
-                            }
-
-                            a.getWarpPowderCooldowns().put(p.getUniqueId(), System.currentTimeMillis());
+                        if (canCreatePlatform(p)) {
+                            a.getRescuePlatformCooldowns().put(p.getUniqueId(), System.currentTimeMillis());
+                            Material platformMaterial = Material.valueOf(shop.getYml().getString(ConfigPath.SHOP_SPECIAL_RESCUE_PLATFORM_BLOCK_MATERIAL));
                             if (inHand.getAmount() > 1) {
                                 inHand.setAmount(inHand.getAmount() - 1);
                             } else {
                                 p.getInventory().remove(inHand);
                             }
-                            new com.andrei1058.bedwars.special.WarpPowder(p, (long) (warpPowderTPDelay * 20), a, inHand);
-
+                            new com.andrei1058.bedwars.special.RescuePlatform(p, getShopDouble(ConfigPath.SHOP_SPECIAL_RESCUE_PLATFORM_BREAK_TIME), platformMaterial);
+                        } else {
+                            p.sendMessage(getMsg(p, Messages.SPECIAL_ITEMS_RESCUE_PLATFORM_CREATE_FAILED));
                         }
-
                     }
-                    if (inHand.getType() == Material.valueOf(shop.getString(ConfigPath.SHOP_SPECIAL_PROTECTION_WALL_MATERIAL)) && shop.getBoolean(ConfigPath.SHOP_SPECIAL_PROTECTION_WALL_ENABLE)) {
+                    if (((inHand.getType() == Material.valueOf(shop.getString(ConfigPath.SHOP_SPECIAL_WARP_POWDER_MATERIAL)))
+                            || (com.andrei1058.bedwars.special.WarpPowder.isWarping(p)
+                            && inHand.getType() == Material.valueOf(shop.getString(ConfigPath.SHOP_SPECIAL_WARP_POWDER_USE_MATERIAL))))
+                            && shop.getBoolean(ConfigPath.SHOP_SPECIAL_WARP_POWDER_ENABLE)) {
 
                         e.setCancelled(true);
 
-                        if (System.currentTimeMillis() - a.getProtectionWallCooldowns().getOrDefault(p.getUniqueId(), 0L) > (protectionWallCooldown * 1000)) {
-
-                            if (canCreateWall(p, protectionWallWidth, protectionWallHeight, protectionWallDistance)) {
-                                a.getProtectionWallCooldowns().put(p.getUniqueId(), System.currentTimeMillis());
-                                if (inHand.getAmount() > 1) {
-                                    inHand.setAmount(inHand.getAmount() - 1);
-                                } else {
-                                    p.getInventory().remove(inHand);
-                                }
-                                
-                                Material wallMaterial = Material.valueOf(BedWars.specialItemsConfig.getYml().getString(ConfigPath.SPECIAL_ITEMS_PROTECTION_WALL_MATERIAL));
-                                
-                                new com.andrei1058.bedwars.special.ProtectionWall(p, a, protectionWallWidth, protectionWallHeight, 
-                                    protectionWallDistance, wallMaterial);
-                            } else {
-                                p.sendMessage(getMsg(p, Messages.SPECIAL_ITEMS_PROTECTION_WALL_CREATE_FAILED));
-                            }
-
+                        if (com.andrei1058.bedwars.special.WarpPowder.isWarping(p)) {
+                            com.andrei1058.bedwars.special.WarpPowder.getWarpTask(p).cancel(true);
+                            return;
                         }
 
+                        double warpPowderCooldown = getShopDouble(ConfigPath.SHOP_SPECIAL_WARP_POWDER_COOLDOWN);
+                        long remainingCooldown = getRemainingCooldownMillis(a.getWarpPowderCooldowns().getOrDefault(p.getUniqueId(), 0L), warpPowderCooldown);
+                        if (remainingCooldown > 0L) {
+                            p.sendMessage(formatCooldown(p, Messages.SPECIAL_ITEMS_WARP_POWDER_COOLDOWN, remainingCooldown));
+                            return;
+                        }
+
+                        a.getWarpPowderCooldowns().put(p.getUniqueId(), System.currentTimeMillis());
+                        ItemStack originalItem = inHand.clone();
+                        ItemStack activeItem = inHand.clone();
+                        activeItem.setType(Material.valueOf(shop.getString(ConfigPath.SHOP_SPECIAL_WARP_POWDER_USE_MATERIAL)));
+                        p.getInventory().setItemInHand(activeItem);
+                        p.updateInventory();
+                        new com.andrei1058.bedwars.special.WarpPowder(p, (long) (getShopDouble(ConfigPath.SHOP_SPECIAL_WARP_POWDER_TELEPORT_TIME) * 20), a, originalItem, activeItem, p.getInventory().getHeldItemSlot());
+                    }
+                    if (inHand.getType() == Material.valueOf(shop.getString(ConfigPath.SHOP_SPECIAL_PROTECTION_WALL_MATERIAL))
+                            && shop.getBoolean(ConfigPath.SHOP_SPECIAL_PROTECTION_WALL_ENABLE)) {
+
+                        e.setCancelled(true);
+
+                        double protectionWallCooldown = getShopDouble(ConfigPath.SHOP_SPECIAL_PROTECTION_WALL_COOLDOWN);
+                        long remainingCooldown = getRemainingCooldownMillis(a.getProtectionWallCooldowns().getOrDefault(p.getUniqueId(), 0L), protectionWallCooldown);
+                        if (remainingCooldown > 0L) {
+                            p.sendMessage(formatCooldown(p, Messages.SPECIAL_ITEMS_PROTECTION_WALL_COOLDOWN, remainingCooldown));
+                            return;
+                        }
+
+                        int protectionWallWidth = getShopInt(ConfigPath.SHOP_SPECIAL_PROTECTION_WALL_WIDTH);
+                        int protectionWallHeight = getShopInt(ConfigPath.SHOP_SPECIAL_PROTECTION_WALL_HEIGHT);
+                        int protectionWallDistance = getShopInt(ConfigPath.SHOP_SPECIAL_PROTECTION_WALL_DISTANCE);
+
+                        if (canCreateWall(p, protectionWallWidth, protectionWallHeight, protectionWallDistance)) {
+                            a.getProtectionWallCooldowns().put(p.getUniqueId(), System.currentTimeMillis());
+                            if (inHand.getAmount() > 1) {
+                                inHand.setAmount(inHand.getAmount() - 1);
+                            } else {
+                                p.getInventory().remove(inHand);
+                            }
+
+                            Material wallMaterial = Material.valueOf(shop.getYml().getString(ConfigPath.SHOP_SPECIAL_PROTECTION_WALL_BLOCK_MATERIAL));
+
+                            new ProtectionWall(p, a, protectionWallWidth, protectionWallHeight,
+                                    protectionWallDistance, wallMaterial);
+                        } else {
+                            p.sendMessage(getMsg(p, Messages.SPECIAL_ITEMS_PROTECTION_WALL_CREATE_FAILED));
+                        }
                     }
                 }
             }

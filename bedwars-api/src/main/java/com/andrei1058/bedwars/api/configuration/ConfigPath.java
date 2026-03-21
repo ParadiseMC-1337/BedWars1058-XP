@@ -251,6 +251,7 @@ public class ConfigPath {
 
     private static final String GENERAL_FIREBALL_PATH = "fireball";
     public static final String GENERAL_FIREBALL_EXPLOSION_SIZE = GENERAL_FIREBALL_PATH + ".explosion-size";
+    public static final String GENERAL_FIREBALL_EXPLOSION_YIELD = GENERAL_FIREBALL_PATH + ".explosion-yield";
     public static final String GENERAL_FIREBALL_SPEED_MULTIPLIER = GENERAL_FIREBALL_PATH + ".speed-multiplier";
     public static final String GENERAL_FIREBALL_MAKE_FIRE = GENERAL_FIREBALL_PATH + ".make-fire";
     private static final String GENERAL_FIREBALL_KNOCKBACK_PATH = GENERAL_FIREBALL_PATH + ".knockback";
@@ -281,11 +282,22 @@ public class ConfigPath {
 
     public static final String SHOP_SPECIAL_RESCUE_PLATFORM_ENABLE = SHOP_SPECIALS_PATH + ".rescue-platform.enable";
     public static final String SHOP_SPECIAL_RESCUE_PLATFORM_MATERIAL = SHOP_SPECIALS_PATH + ".rescue-platform.material";
+    public static final String SHOP_SPECIAL_RESCUE_PLATFORM_BLOCK_MATERIAL = SHOP_SPECIALS_PATH + ".rescue-platform.block-material";
+    public static final String SHOP_SPECIAL_RESCUE_PLATFORM_COOLDOWN = SHOP_SPECIALS_PATH + ".rescue-platform.cooldown";
+    public static final String SHOP_SPECIAL_RESCUE_PLATFORM_BREAK_TIME = SHOP_SPECIALS_PATH + ".rescue-platform.break-time";
     public static final String SHOP_SPECIAL_WARP_POWDER_ENABLE = SHOP_SPECIALS_PATH + ".warp-powder.enable";
     public static final String SHOP_SPECIAL_WARP_POWDER_MATERIAL = SHOP_SPECIALS_PATH + ".warp-powder.material";
+    public static final String SHOP_SPECIAL_WARP_POWDER_USE_MATERIAL = SHOP_SPECIALS_PATH + ".warp-powder.use-material";
+    public static final String SHOP_SPECIAL_WARP_POWDER_COOLDOWN = SHOP_SPECIALS_PATH + ".warp-powder.cooldown";
+    public static final String SHOP_SPECIAL_WARP_POWDER_TELEPORT_TIME = SHOP_SPECIALS_PATH + ".warp-powder.teleport-time";
 
     public static final String SHOP_SPECIAL_PROTECTION_WALL_ENABLE = SHOP_SPECIALS_PATH + ".protection-wall.enable";
     public static final String SHOP_SPECIAL_PROTECTION_WALL_MATERIAL = SHOP_SPECIALS_PATH + ".protection-wall.material";
+    public static final String SHOP_SPECIAL_PROTECTION_WALL_BLOCK_MATERIAL = SHOP_SPECIALS_PATH + ".protection-wall.block-material";
+    public static final String SHOP_SPECIAL_PROTECTION_WALL_COOLDOWN = SHOP_SPECIALS_PATH + ".protection-wall.cooldown";
+    public static final String SHOP_SPECIAL_PROTECTION_WALL_WIDTH = SHOP_SPECIALS_PATH + ".protection-wall.width";
+    public static final String SHOP_SPECIAL_PROTECTION_WALL_HEIGHT = SHOP_SPECIALS_PATH + ".protection-wall.height";
+    public static final String SHOP_SPECIAL_PROTECTION_WALL_DISTANCE = SHOP_SPECIALS_PATH + ".protection-wall.distance";
 
     public static final String SHOP_SPECIAL_SILVERFISH_ENABLE = SHOP_SPECIALS_PATH + ".silverfish.enable";
     public static final String SHOP_SPECIAL_SILVERFISH_MATERIAL = SHOP_SPECIALS_PATH + ".silverfish.material";

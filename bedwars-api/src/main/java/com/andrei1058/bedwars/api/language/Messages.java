@@ -481,11 +481,14 @@ public class Messages {
     public static final String GENERAL_CONFIGURATION_WAITING_ITEMS_LORE = ConfigPath.GENERAL_CONFIGURATION_PRE_GAME_ITEMS_PATH + "-%path%-lore";
 
 
-
-
     public static final String SPECIAL_ITEMS_RESCUE_PLATFORM_CREATE_FAILED = "special-items.rescue-platform.create-failed";
+    public static final String SPECIAL_ITEMS_RESCUE_PLATFORM_COOLDOWN = "special-items.rescue-platform.cooldown";
 
     public static final String SPECIAL_ITEMS_PROTECTION_WALL_CREATE_FAILED = "special-items.protection-wall.create-failed";
+    public static final String SPECIAL_ITEMS_PROTECTION_WALL_COOLDOWN = "special-items.protection-wall.cooldown";
+
+    public static final String SPECIAL_ITEMS_WARP_POWDER_CANCELLED = "special-items.warp-powder.cancelled";
+    public static final String SPECIAL_ITEMS_WARP_POWDER_COOLDOWN = "special-items.warp-powder.cooldown";
 
 
 

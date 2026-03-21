@@ -1109,7 +1109,11 @@ public class SimplifiedChinese extends Language {
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_TITLE + "3", "&c&l警报！！！");
         yml.addDefault(Messages.UPGRADES_TRAP_CUSTOM_SUBTITLE + "3", "{color}{team}&f触发了陷阱！");
         yml.addDefault(Messages.SPECIAL_ITEMS_RESCUE_PLATFORM_CREATE_FAILED, "&c你不能在这使用自救平台");
+        yml.addDefault(Messages.SPECIAL_ITEMS_RESCUE_PLATFORM_COOLDOWN, "&c你需要等待&e {s} &c秒后才能再次使用自救平台");
         yml.addDefault(Messages.SPECIAL_ITEMS_PROTECTION_WALL_CREATE_FAILED, "&c你不能在这使用防守墙");
+        yml.addDefault(Messages.SPECIAL_ITEMS_PROTECTION_WALL_COOLDOWN, "&c你需要等待&e {s} &c秒后才能再次使用防守墙");
+        yml.addDefault(Messages.SPECIAL_ITEMS_WARP_POWDER_COOLDOWN, "&c你需要等待&e {s} &c秒后才能再次使用回城卷轴");
+        yml.addDefault(Messages.SPECIAL_ITEMS_WARP_POWDER_CANCELLED, "&e回城卷轴已取消");
         save();
         setPrefix(m(Messages.PREFIX));
         setPrefixStatic(m(Messages.PREFIX));

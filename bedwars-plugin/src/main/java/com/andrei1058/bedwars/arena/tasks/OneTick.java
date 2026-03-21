@@ -20,16 +20,21 @@
 
 package com.andrei1058.bedwars.arena.tasks;
 
+import com.andrei1058.bedwars.BedWars;
 import com.andrei1058.bedwars.api.arena.generator.IGenerator;
 import com.andrei1058.bedwars.arena.OreGenerator;
 
 public class OneTick implements Runnable {
     @Override
     public void run() {
+        for (OreGenerator generator : OreGenerator.getTickingGenerators()) {
+            generator.spawn();
+        }
 
-        //OneTick generators
-        for (IGenerator h : OreGenerator.getRotation()) {
-            h.rotate();
+        if (BedWars.config.getBoolean(com.andrei1058.bedwars.api.configuration.ConfigPath.GENERAL_CONFIGURATION_PERFORMANCE_ROTATE_GEN)) {
+            for (IGenerator h : OreGenerator.getRotation()) {
+                h.rotate();
+            }
         }
     }
 }

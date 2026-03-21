@@ -183,10 +183,6 @@ public class GamePlayingTask implements Runnable, PlayingTask {
                 }
             }
 
-            // spawn items
-            for (IGenerator o : t.getGenerators()) {
-                o.spawn();
-            }
         }
 
         /* AFK SYSTEM FOR PLAYERS */
@@ -248,10 +244,6 @@ public class GamePlayingTask implements Runnable, PlayingTask {
             }
         }
 
-        /* SPAWN ITEMS */
-        for (IGenerator o : getArena().getOreGenerators()) {
-            o.spawn();
-        }
     }
 
     public void cancel() {

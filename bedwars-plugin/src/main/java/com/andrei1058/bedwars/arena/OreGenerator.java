@@ -234,7 +234,7 @@ public class OreGenerator implements IGenerator {
         lastSpawnTicks--;
         // 更新全息显示上的倒计时
         for (IGenHolo e : armorStands.values()) {
-            e.setTimerName(Language.getLang(e.getIso()).m(Messages.GENERATOR_HOLOGRAM_TIMER).replace("{seconds}", formatDelay(lastSpawnTicks)));
+            e.setTimerName(Language.getLang(e.getIso()).m(Messages.GENERATOR_HOLOGRAM_TIMER).replace("{seconds}", String.valueOf(lastSpawnTicks / 20L)));
         }
     }
 
@@ -295,7 +295,7 @@ public class OreGenerator implements IGenerator {
             this.tier = createArmorStand(Language.getLang(iso).m(Messages.GENERATOR_HOLOGRAM_TIER)
                     .replace("{tier}", Language.getLang(iso).m(Messages.FORMATTING_GENERATOR_TIER1)), location.clone().add(0, 3, 0));
             this.timer = createArmorStand(Language.getLang(iso).m(Messages.GENERATOR_HOLOGRAM_TIMER)
-                    .replace("{seconds}", formatDelay(lastSpawnTicks)), location.clone().add(0, 2.4, 0));
+                    .replace("{seconds}", String.valueOf(lastSpawnTicks / 20L)), location.clone().add(0, 2.4, 0));
             this.name = createArmorStand(Language.getLang(iso).m(getOre().getType() == Material.DIAMOND ? Messages.GENERATOR_HOLOGRAM_TYPE_DIAMOND
                     : Messages.GENERATOR_HOLOGRAM_TYPE_EMERALD), location.clone().add(0, 2.7, 0));
 
@@ -570,9 +570,5 @@ public class OreGenerator implements IGenerator {
 
     private static long toTicks(double delaySeconds) {
         return Math.max(1L, Math.round(delaySeconds * 20.0D));
-    }
-
-    private static String formatDelay(long ticks) {
-        return String.valueOf((ticks + 19L) / 20L);
     }
 }

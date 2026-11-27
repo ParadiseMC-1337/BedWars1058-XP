@@ -47,7 +47,6 @@ import org.bukkit.util.Vector;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static com.andrei1058.bedwars.BedWars.*;
@@ -574,10 +573,6 @@ public class OreGenerator implements IGenerator {
     }
 
     private static String formatDelay(long ticks) {
-        double seconds = ticks / 20.0D;
-        if (Math.abs(seconds - Math.rint(seconds)) < 0.000001D) {
-            return String.valueOf((long) Math.rint(seconds));
-        }
-        return String.format(Locale.US, "%.1f", seconds);
+        return String.valueOf((ticks + 19L) / 20L);
     }
 }

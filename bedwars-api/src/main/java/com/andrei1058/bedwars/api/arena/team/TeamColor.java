@@ -37,7 +37,9 @@ public enum TeamColor {
     PINK,
     GRAY,
     DARK_GREEN,
-    DARK_GRAY;
+    DARK_GRAY,
+    ORANGE,
+    PURPLE;
 
     /**
      * Get chat color by team color.
@@ -46,28 +48,23 @@ public enum TeamColor {
      * @return {@link ChatColor} for given team.
      */
     public static ChatColor getChatColor(@NotNull String tColor) {
-        ChatColor color;
-        TeamColor teamColor = TeamColor.valueOf(tColor.toUpperCase());
-        if (teamColor == TeamColor.PINK) {
-            color = ChatColor.LIGHT_PURPLE;
-        } else {
-            color = ChatColor.valueOf(teamColor.toString());
-        }
-        return color;
+        return TeamColor.valueOf(tColor.toUpperCase()).chat();
     }
 
     /**
      * @return Chat color for this team color.
      */
     public ChatColor chat() {
-        ChatColor color;
-        TeamColor teamColor = TeamColor.valueOf(this.toString());
-        if (teamColor == TeamColor.PINK) {
-            color = ChatColor.LIGHT_PURPLE;
-        } else {
-            color = ChatColor.valueOf(teamColor.toString());
+        switch (this) {
+            case PINK:
+                return ChatColor.LIGHT_PURPLE;
+            case ORANGE:
+                return ChatColor.GOLD;
+            case PURPLE:
+                return ChatColor.DARK_PURPLE;
+            default:
+                return ChatColor.valueOf(this.toString());
         }
-        return color;
     }
 
     /**
@@ -76,13 +73,7 @@ public enum TeamColor {
      */
     @Deprecated
     public static ChatColor getChatColor(TeamColor teamColor) {
-        ChatColor color;
-        if (teamColor == TeamColor.PINK) {
-            color = ChatColor.LIGHT_PURPLE;
-        } else {
-            color = ChatColor.valueOf(teamColor.toString());
-        }
-        return color;
+        return teamColor.chat();
     }
 
     /**
@@ -104,6 +95,12 @@ public enum TeamColor {
                 break;
             case DARK_GRAY:
                 color = DyeColor.GRAY;
+                break;
+            case ORANGE:
+                color = DyeColor.ORANGE;
+                break;
+            case PURPLE:
+                color = DyeColor.PURPLE;
                 break;
             default:
                 color = DyeColor.valueOf(teamColor.toUpperCase());
@@ -129,6 +126,12 @@ public enum TeamColor {
                 break;
             case DARK_GRAY:
                 color = DyeColor.GRAY;
+                break;
+            case ORANGE:
+                color = DyeColor.ORANGE;
+                break;
+            case PURPLE:
+                color = DyeColor.PURPLE;
                 break;
             default:
                 color = DyeColor.valueOf(this.toString());
@@ -175,6 +178,12 @@ public enum TeamColor {
             case DARK_GRAY:
                 i = 7;
                 break;
+            case ORANGE:
+                i = 1;
+                break;
+            case PURPLE:
+                i = 10;
+                break;
         }
         return (byte) i;
     }
@@ -214,6 +223,13 @@ public enum TeamColor {
                 break;
             case DARK_GRAY:
                 i = 7;
+                break;
+            case ORANGE:
+                i = 1;
+                break;
+            case PURPLE:
+                i = 10;
+                break;
         }
         return (byte) i;
     }
@@ -254,6 +270,12 @@ public enum TeamColor {
             case "GRAY_WOOL":
                 name = "Dark_Gray";
                 break;
+            case "ORANGE_WOOL":
+                name = "Orange";
+                break;
+            case "PURPLE_WOOL":
+                name = "Purple";
+                break;
         }
         return name;
     }
@@ -293,6 +315,12 @@ public enum TeamColor {
                 break;
             case 7:
                 name = "Gray";
+                break;
+            case 1:
+                name = "Orange";
+                break;
+            case 10:
+                name = "Purple";
                 break;
 
         }
@@ -338,6 +366,12 @@ public enum TeamColor {
             case DARK_GRAY:
                 color = Color.fromBGR(74, 74, 74);
                 break;
+            case ORANGE:
+                color = Color.ORANGE;
+                break;
+            case PURPLE:
+                color = Color.PURPLE;
+                break;
         }
         return color;
     }
@@ -378,6 +412,12 @@ public enum TeamColor {
                 break;
             case DARK_GRAY:
                 color = Color.fromBGR(74, 74, 74);
+                break;
+            case ORANGE:
+                color = Color.ORANGE;
+                break;
+            case PURPLE:
+                color = Color.PURPLE;
                 break;
         }
         return color;
@@ -420,6 +460,12 @@ public enum TeamColor {
             case DARK_GRAY:
                 color = "GRAY_BED";
                 break;
+            case ORANGE:
+                color = "ORANGE_BED";
+                break;
+            case PURPLE:
+                color = "PURPLE_BED";
+                break;
         }
         return Material.valueOf(color);
     }
@@ -458,6 +504,12 @@ public enum TeamColor {
                 break;
             case DARK_GRAY:
                 color = "GRAY_BED";
+                break;
+            case ORANGE:
+                color = "ORANGE_BED";
+                break;
+            case PURPLE:
+                color = "PURPLE_BED";
                 break;
         }
         return Material.valueOf(color);
@@ -503,6 +555,12 @@ public enum TeamColor {
             case DARK_GRAY:
                 color = "GRAY_STAINED_GLASS";
                 break;
+            case ORANGE:
+                color = "ORANGE_STAINED_GLASS";
+                break;
+            case PURPLE:
+                color = "PURPLE_STAINED_GLASS";
+                break;
         }
         return Material.valueOf(color);
     }
@@ -544,6 +602,12 @@ public enum TeamColor {
                 break;
             case DARK_GRAY:
                 color = "GRAY_STAINED_GLASS";
+                break;
+            case ORANGE:
+                color = "ORANGE_STAINED_GLASS";
+                break;
+            case PURPLE:
+                color = "PURPLE_STAINED_GLASS";
                 break;
         }
         return Material.valueOf(color);
@@ -589,6 +653,12 @@ public enum TeamColor {
             case DARK_GRAY:
                 color = "GRAY_STAINED_PANE";
                 break;
+            case ORANGE:
+                color = "ORANGE_STAINED_GLASS_PANE";
+                break;
+            case PURPLE:
+                color = "PURPLE_STAINED_GLASS_PANE";
+                break;
         }
         return Material.valueOf(color);
     }
@@ -630,6 +700,12 @@ public enum TeamColor {
                 break;
             case DARK_GRAY:
                 color = "GRAY_STAINED_PANE";
+                break;
+            case ORANGE:
+                color = "ORANGE_STAINED_GLASS_PANE";
+                break;
+            case PURPLE:
+                color = "PURPLE_STAINED_GLASS_PANE";
                 break;
         }
         return Material.valueOf(color);
@@ -675,6 +751,12 @@ public enum TeamColor {
             case RED:
                 color = "RED_TERRACOTTA";
                 break;
+            case ORANGE:
+                color = "ORANGE_TERRACOTTA";
+                break;
+            case PURPLE:
+                color = "PURPLE_TERRACOTTA";
+                break;
         }
         return Material.valueOf(color);
     }
@@ -716,6 +798,12 @@ public enum TeamColor {
                 break;
             case RED:
                 color = "RED_TERRACOTTA";
+                break;
+            case ORANGE:
+                color = "ORANGE_TERRACOTTA";
+                break;
+            case PURPLE:
+                color = "PURPLE_TERRACOTTA";
                 break;
         }
         return Material.valueOf(color);
@@ -761,6 +849,12 @@ public enum TeamColor {
             case RED:
                 color = "RED_WOOL";
                 break;
+            case ORANGE:
+                color = "ORANGE_WOOL";
+                break;
+            case PURPLE:
+                color = "PURPLE_WOOL";
+                break;
         }
         return Material.valueOf(color);
     }
@@ -802,6 +896,12 @@ public enum TeamColor {
                 break;
             case RED:
                 color = "RED_WOOL";
+                break;
+            case ORANGE:
+                color = "ORANGE_WOOL";
+                break;
+            case PURPLE:
+                color = "PURPLE_WOOL";
                 break;
         }
         return Material.valueOf(color);
